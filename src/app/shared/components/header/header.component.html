@@ -1,0 +1,21 @@
+<header>
+    <mat-toolbar color="primary" class="mat-elevation-z2">
+        <div class="left">
+            <button mat-icon-button (click)="toolbarService.toggleMenu(!state)">
+                <mat-icon>menu_open</mat-icon>
+            </button>
+            <a routerLink="/">
+                <img src="../../../../assets/logo.png" alt="">
+            </a>
+            <span>Lifion Accelerator</span>
+        </div>
+        <div class="right">
+            <button mat-icon-button>
+                <mat-icon>settings</mat-icon>
+            </button>
+            <button mat-icon-button>
+                <mat-icon>help</mat-icon>
+            </button>
+        </div>
+    </mat-toolbar>
+</header>

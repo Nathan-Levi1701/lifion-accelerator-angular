@@ -1,0 +1,8 @@
+<ng-container *ngIf="formGroups.length > 0">
+    <mat-tab-group animationDuration="0ms">
+        <mat-tab *ngFor="let formGroup of formGroups; index as i" [label]="formHeadings[i] | titlecase">
+            <h3>{{formHeadings[i] | titlecase}}</h3>
+            <form-input [formGroup]="formGroup" [formLabels]="formLabels[i]"></form-input>
+        </mat-tab>
+    </mat-tab-group>
+</ng-container>

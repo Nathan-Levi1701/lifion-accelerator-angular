@@ -1,0 +1,17 @@
+mat-toolbar {
+    height: 50px !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .left {
+        display: inherit;
+        align-items: center;
+
+        img {
+            height: 20px;
+            width: auto;
+            margin-right: 20px;
+        }
+    }
+}

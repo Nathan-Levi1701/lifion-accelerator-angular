@@ -1,0 +1,16 @@
+mat-card {
+    width: 100%;
+    min-height: 18vh;
+    padding: 20px;
+    text-align: left;
+
+    mat-card-title {
+        mat-icon {
+            margin-right: 10px;
+        }
+
+        h3 {
+            margin: 0;
+        }
+    }
+}

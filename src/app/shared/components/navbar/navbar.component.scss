@@ -1,0 +1,31 @@
+mat-toolbar {
+    background: #ffffff;
+    height: 61px !important;
+    border-bottom: 1px solid #e6e6e4;
+
+    .title {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    mat-nav-list {
+        margin-left: 16px;
+        padding: 0;
+        display: flex;
+
+        span {
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        a {
+            height: 56px !important;
+            width: auto;
+            margin-right: 5px;
+        }
+
+        .active {
+            border-bottom: 3px solid #26318B !important;
+        }
+    }
+}

@@ -1,0 +1,19 @@
+.root {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .container {
+        height: 100%;
+
+        mat-sidenav-container {
+            display: block;
+            height: 100%;
+
+            .mat-drawer {
+                width: 350px;
+            }
+        }
+    }
+
+}

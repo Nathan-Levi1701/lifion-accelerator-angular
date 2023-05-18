@@ -1,0 +1,22 @@
+:host {
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+
+mat-nav-list {
+    padding: 0;
+
+    mat-list-item {
+        height: 60px !important;
+        border-radius: 0;
+
+        mat-icon {
+            margin-right: 10px;
+        }
+    }
+}
+
+.active {
+    border-right: 3px solid #26318B !important;
+}

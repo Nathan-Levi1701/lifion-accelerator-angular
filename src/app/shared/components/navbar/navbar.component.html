@@ -1,0 +1,13 @@
+<nav>
+    <mat-toolbar>
+        <span class="title"> {{ title | uppercase }}</span>
+        <mat-nav-list>
+            <ng-container *ngFor="let tab of tabs">
+                <a mat-list-item [routerLink]="[tab.url]" routerLinkActive="active"
+                    [routerLinkActiveOptions]="{ exact: false }">
+                    <span>{{tab.name}}</span>
+                </a>
+            </ng-container>
+        </mat-nav-list>
+    </mat-toolbar>
+</nav>

@@ -1,0 +1,43 @@
+html,
+body {
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+@mixin mediaQuery($size) {
+  @if $size ==xs {
+    @media (max-width: 576px) {
+      @content;
+    }
+  }
+
+  @else if $size ==sm {
+    @media (min-width: 768px) {
+      @content;
+    }
+  }
+
+  @else if $size ==med {
+    @media (min-width: 992) {
+      @content;
+    }
+  }
+
+  @else if $size ==lg {
+    @media (min-width: 1200px) {
+      @content;
+    }
+  }
+
+  @else if $size ==xl {
+    @media (min-width: 1400px) {
+      @content;
+    }
+  }
+}

@@ -1,7 +1,6 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { QuestionService } from '~/services/question.service';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { FormService } from '~/services/form.service';
 
 @Component({
   selector: 'form-input',
@@ -10,24 +9,35 @@ import { QuestionService } from '~/services/question.service';
 })
 
 
-export class FormInputComponent implements OnChanges, OnDestroy {
+export class FormInputComponent implements OnInit, OnDestroy {
   @Input() formGroup: FormGroup = new FormGroup({});
   @Input() formLabels: Array<string> = [];
+  @Input() submit: any = {};
 
-  constructor() {
+  constructor(public formService: FormService) {
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes)
+  ngOnInit(): void {
+    this.formService.formSubmitObservable.subscribe((state: boolean) => {
+      if (state) {
+        this.formGroup.markAllAsTouched()
+      }
+    })
+
+    this.formService.formResetObservable.subscribe((state: boolean) => {
+      if (state) {
+        this.formGroup.reset()
+        this.formService.formSubmitSubject.next(false)
+      }
+    })
   }
 
+  onSubmit(formGroup: FormGroup) {
 
-
-  submit(formGroup: FormGroup) {
-    console.log(formGroup.value)
   }
 
   ngOnDestroy(): void {
-
+    this.formService.formResetSubject.unsubscribe();
+    this.formService.formSubmitSubject.unsubscribe();
   }
 }

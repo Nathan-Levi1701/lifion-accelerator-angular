@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToolbarService } from '~/services/toolbar.service';
 
@@ -7,7 +7,7 @@ import { ToolbarService } from '~/services/toolbar.service';
   templateUrl: './drawer-content.component.html',
   styleUrls: ['./drawer-content.component.scss']
 })
-export class DrawerContentComponent implements OnInit {
+export class DrawerContentComponent implements OnInit, OnDestroy {
   public router: Router;
 
   public navigation: any = [
@@ -27,9 +27,9 @@ export class DrawerContentComponent implements OnInit {
           url: "/clients/hr-structure/legal-entities",
         },
         {
-          name: "Cost Centers",
+          name: "Cost Center",
           icon: 'account_tree',
-          url: "/clients/hr-structure/cost-centers",
+          url: "/clients/hr-structure/cost-center",
         },
         {
           name: "Locations",
@@ -255,5 +255,8 @@ export class DrawerContentComponent implements OnInit {
   public async onNavigation(children: Array<any>) {
     this.router.navigateByUrl(children[0].url ?? this.navigation[0].url)
     this.toolbarService.tabsSubject.next(children)
+  }
+
+  ngOnDestroy(): void {
   }
 }

@@ -9,6 +9,7 @@ import { NavBarModule } from '~/components/navbar/navbar.module';
 import { TemplateHomeModule } from '~/templates/template-home/template-home.module';
 import { DrawerContentModule } from '~/components/drawer-content/drawer-content.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FooterModule } from '~/components/footer/footer.module';
 @NgModule({
   declarations: [
     AppComponent
@@ -18,6 +19,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     AppRoutingModule,
     TemplateHomeModule,
     HeaderModule,
+    FooterModule,
     NavBarModule,
     DrawerContentModule,
     MaterialModule,

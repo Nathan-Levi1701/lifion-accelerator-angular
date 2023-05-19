@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ToolbarService } from '~/services/toolbar.service';
 
 @Component({
@@ -6,7 +6,7 @@ import { ToolbarService } from '~/services/toolbar.service';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
   public state: boolean = true;
 
   constructor(public toolbarService: ToolbarService) { }
@@ -15,6 +15,10 @@ export class HeaderComponent implements OnInit {
     this.toolbarService.toggleMenuObservable.subscribe((state: boolean) => {
       this.state = state;
     });
+  }
+
+  ngOnDestroy(): void {
+    this.toolbarService.tabsSubject.unsubscribe();
   }
 
 }

@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Data, Router } from '@angular/router';
 import { ToolbarService } from '~/services/toolbar.service';
 
 @Component({
@@ -7,7 +7,7 @@ import { ToolbarService } from '~/services/toolbar.service';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
-export class NavBarComponent implements OnInit {
+export class NavBarComponent implements OnInit, OnDestroy {
   public router: Router;
   public title: string = '';
   public tabs: Array<any> = [];
@@ -24,6 +24,14 @@ export class NavBarComponent implements OnInit {
         this.title = params['id']
       }
     })
+
+    activatedRoute.data.subscribe((data: Data) => {
+      this.title = data['title']
+
+      if (data['tabs']) {
+        this.tabs = []
+      }
+    })
   }
 
   ngOnInit(): void {
@@ -33,4 +41,9 @@ export class NavBarComponent implements OnInit {
   public async onNavigation() {
     this.router.navigateByUrl(this.router.url)
   }
+
+  ngOnDestroy(): void {
+    this.toolbarService.toggleMenuSubject.unsubscribe();
+  }
+
 }

@@ -45,6 +45,9 @@
       ],
       "~/services/*": [
         "app/shared/services/*"
+      ],
+      "~/interfaces/*": [
+        "app/shared/interfaces/*"
       ]
     }
   },

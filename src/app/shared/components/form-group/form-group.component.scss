@@ -9,6 +9,12 @@ form {
     flex-direction: column;
 }
 
+.footer {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+}
+
 mat-divider {
     margin: 1rem 0;
 }

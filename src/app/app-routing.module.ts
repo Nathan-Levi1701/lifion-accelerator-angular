@@ -6,7 +6,7 @@ const routes: Routes = [
   {
     path: '', component: TemplateHomeComponent,
   },
-  { path: 'clients', loadChildren: () => import('./modules/clients/clients.module').then(m => m.ClientsModule) },
+  { path: 'view', loadChildren: () => import('./modules/view/view.module').then(m => m.ViewModule) },
   { path: 'section', loadChildren: () => import('./modules/section/section.module').then(m => m.SectionModule) }
 ];
 

@@ -35,7 +35,8 @@
         <ng-container matColumnDef="onboard">
             <th mat-header-cell *matHeaderCellDef></th>
             <td mat-cell *matCellDef="let row">
-                <button mat-flat-button routerLink="/clients/view/new" color="primary">Start Onboarding</button>
+                <button mat-flat-button routerLink="/client/{{row.id}}/hr-structure/process-questions"
+                    color="primary">Start Onboarding</button>
             </td>
         </ng-container>
 

@@ -2,13 +2,17 @@ import { Injectable } from '@angular/core';
 import { db } from '../../firebase/config';
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, updateDoc, limit, startAfter, orderBy, onSnapshot } from "firebase/firestore";
 import Client from '~/interfaces/Client.interface'
+import { Observable, BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ClientService {
-  constructor() {
+  public clientObservable = new Observable<Client>();
+  public clientSubject = new BehaviorSubject<Client>({} as any);
 
+  constructor() {
+    this.clientObservable = this.clientSubject.asObservable();
   }
 
   public async get(clientId: string) {

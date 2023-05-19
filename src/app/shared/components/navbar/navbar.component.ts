@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Data, Router } from '@angular/router';
+import { ClientService } from '~/services/client.service';
 import { ToolbarService } from '~/services/toolbar.service';
 
 @Component({
@@ -12,24 +13,35 @@ export class NavBarComponent implements OnInit, OnDestroy {
   public title: string = '';
   public tabs: Array<any> = [];
 
-  constructor(public activatedRoute: ActivatedRoute, public toolbarService: ToolbarService, router: Router) {
+  constructor(public activatedRoute: ActivatedRoute, public toolbarService: ToolbarService, public clientService: ClientService, router: Router) {
     this.router = router;
 
     toolbarService.tabsObservable.subscribe((tabs) => {
-      this.tabs = tabs
+      this.tabs = tabs;
     })
 
-    activatedRoute.params.subscribe((params) => {
-      if (params['id']) {
-        this.title = params['id']
+    this.activatedRoute.params.subscribe(async (params) => {
+      if (params['tab']) {
+        this.title = params['tab'].replaceAll('-', ' ');
+      }
+
+      if (params['clientId']) {
+        this.tabs.forEach((tab) => {
+          tab.url = tab.url.replace('clientId', params['clientId'])
+        })
+
+        const response = await this.clientService.get(params['clientId']);
+        this.clientService.clientSubject.next(response);
+      }
+
+      if (!params['clientId']) {
+        this.tabs = []
       }
     })
 
     activatedRoute.data.subscribe((data: Data) => {
-      this.title = data['title']
-
-      if (data['tabs']) {
-        this.tabs = []
+      if (data['title']) {
+        this.title = data['title'];
       }
     })
   }
@@ -38,12 +50,8 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
   }
 
-  public async onNavigation() {
-    this.router.navigateByUrl(this.router.url)
-  }
-
   ngOnDestroy(): void {
-    this.toolbarService.toggleMenuSubject.unsubscribe();
+    // this.toolbarService.toggleMenuSubject.unsubscribe();
   }
 
 }

@@ -1,6 +1,6 @@
 <nav>
     <mat-toolbar>
-        <span class="title"> {{ title | uppercase }}</span>
+        <span *ngIf="title" class="title"> {{ title | titlecase }}</span>
         <mat-nav-list>
             <ng-container *ngFor="let tab of tabs">
                 <a mat-list-item [routerLink]="[tab.url]" routerLinkActive="active"

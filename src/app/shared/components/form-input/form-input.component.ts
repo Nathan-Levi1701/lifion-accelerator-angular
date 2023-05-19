@@ -14,11 +14,14 @@ export class FormInputComponent implements OnInit, OnDestroy {
   @Input() formLabels: Array<string> = [];
   @Input() submit: any = {};
 
+  @Input() section: string = '';
+  @Input() subSection: string = '';
+
   constructor(public formService: FormService) {
   }
 
   ngOnInit(): void {
-    this.formService.formSubmitObservable.subscribe((state: boolean) => {
+    this.formService.formSubmitObservable.subscribe(async (state: boolean) => {
       if (state) {
         this.formGroup.markAllAsTouched()
       }
@@ -37,7 +40,7 @@ export class FormInputComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.formService.formResetSubject.unsubscribe();
-    this.formService.formSubmitSubject.unsubscribe();
+    // this.formService.formResetSubject.unsubscribe();
+    // this.formService.formSubmitSubject.unsubscribe();
   }
 }

@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatTabGroup } from '@angular/material/tabs';
 import { ActivatedRoute } from '@angular/router';
+import { ClientService } from '~/services/client.service';
 import { FormService } from '~/services/form.service';
 import { QuestionService } from '~/services/question.service';
 
@@ -20,9 +21,13 @@ export class FormGroupComponent implements OnInit, OnDestroy {
   public formHeadings: Array<string> = [];
   public formGroup: FormGroup = new FormGroup({});
   public selectedIndex: number = 0;
-  @ViewChild('tabGroup', { static: false }) tab: MatTabGroup | undefined;
+  public tab: string = '';
+  public section: string = '';
+  public subSection: string = '';
+  public clientId: string = '';
+  @ViewChild('tabGroup', { static: false }) tabGroup: MatTabGroup = {} as any;
 
-  constructor(activatedRoute: ActivatedRoute, public questionService: QuestionService, public formService: FormService, public fb: FormBuilder) {
+  constructor(activatedRoute: ActivatedRoute, public questionService: QuestionService, public formService: FormService, public fb: FormBuilder, public clientService: ClientService) {
     this.activatedRoute = activatedRoute;
   }
 
@@ -31,13 +36,18 @@ export class FormGroupComponent implements OnInit, OnDestroy {
       this.formHeadings = [];
       this.formGroups = [];
       this.x = [];
+      this.clientId = params['clientId'];
 
-      const response = await this.questionService.getQuestions(params['id'], params['section'])
+      const response = await this.questionService.getQuestions(params['tab'], params['section'])
       response.forEach((form) => {
-        this.formHeadings.push(form.id.replaceAll('-', ' '))
+        this.tab = params['tab'];
+        this.section = params['section'];
+        this.subSection = form.id;
+
+        this.formHeadings.push(form.id)
         const formGroup = new FormGroup({})
         this.x = []
-        form.data.forEach((f: any, i: number) => {
+        form.data.forEach((f: any) => {
           this.x.push(f.label);
           formGroup.addControl(f.id, new FormControl('', f.validators?.required.state ? [Validators.required] : []))
         })
@@ -48,13 +58,16 @@ export class FormGroupComponent implements OnInit, OnDestroy {
     })
   }
 
-  onSubmit(formGroup: FormGroup) {
+  async onSubmit(formGroup: FormGroup) {
+    this.subSection = this.formHeadings[this.selectedIndex]
     this.formService.formSubmitSubject.next(true);
 
     if (formGroup.valid) {
-      this.selectedIndex = this.selectedIndex + 1
-      this.formService.formSubmitSubject.next(false)
+      await this.formService.addForm(this.clientId, this.tab, this.section, this.subSection, formGroup.value)
+      this.selectedIndex = this.selectedIndex + 1;
     }
+
+    this.formService.formSubmitSubject.next(false)
   }
 
   onReset() {
@@ -62,7 +75,7 @@ export class FormGroupComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.formService.formResetSubject.unsubscribe();
-    this.formService.formSubmitSubject.unsubscribe();
+    // this.formService.formResetSubject.unsubscribe();
+    // this.formService.formSubmitSubject.unsubscribe();
   }
 }

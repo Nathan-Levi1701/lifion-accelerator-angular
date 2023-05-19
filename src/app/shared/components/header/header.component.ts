@@ -18,7 +18,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.toolbarService.tabsSubject.unsubscribe();
+    // this.toolbarService.tabsSubject.unsubscribe();
   }
 
 }

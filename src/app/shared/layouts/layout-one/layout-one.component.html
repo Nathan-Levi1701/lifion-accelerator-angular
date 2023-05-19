@@ -1,5 +1,7 @@
 <router-outlet name="navbar"></router-outlet>
 
 <div class="container">
-    <router-outlet name="form"></router-outlet>
+    <p>{{currentSection}}</p>
+    <router-outlet *ngIf="currentSection !== 'enterprise-structure'" name="form"></router-outlet>
+    <router-outlet *ngIf="currentSection == 'enterprise-structure'" name="chart"></router-outlet>
 </div>

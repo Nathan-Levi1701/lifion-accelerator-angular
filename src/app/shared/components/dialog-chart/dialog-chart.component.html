@@ -1,0 +1,41 @@
+<h2 mat-dialog-title>{{data.title}}</h2>
+<mat-dialog-content>
+    <form [formGroup]="formGroup" (ngSubmit)="onSubmit(formGroup)">
+        <mat-form-field appearance="fill">
+            <mat-label>Code</mat-label>
+            <input matInput formControlName="code">
+            <mat-error *ngIf="formGroup.get('code')?.hasError('required')">This field is required</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name">
+            <mat-error *ngIf="formGroup.get('name')?.hasError('required')">This field is required</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Structure</mat-label>
+            <input matInput formControlName="parentStructure">
+            <mat-error *ngIf="formGroup.get('parentStructure')?.hasError('required')">This field is
+                required</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Relationship</mat-label>
+            <input matInput formControlName="relationship">
+            <mat-error *ngIf="formGroup.get('relationship')?.hasError('required')">This field is
+                required</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Role</mat-label>
+            <mat-select formControlName="role">
+                <mat-option *ngFor="let role of data.roles" [value]="role.value">
+                    {{role.text}}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="formGroup.get('role')?.hasError('required')">This field is required</mat-error>
+        </mat-form-field>
+        <div class="footer">
+            <button mat-flat-button (click)="dialogRef.close(null)">Cancel</button>
+            <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
+            <button color="primary" type="submit" mat-flat-button>Save</button>
+        </div>
+    </form>
+</mat-dialog-content>

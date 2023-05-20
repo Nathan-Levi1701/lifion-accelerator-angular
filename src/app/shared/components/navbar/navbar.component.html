@@ -1,6 +1,13 @@
 <nav>
     <mat-toolbar>
-        <span *ngIf="title" class="title"> {{ title | titlecase }}</span>
+        <div *ngIf="client && client.id" class="client">
+            <div class="avatar">
+                {{client.name.substring(0, 2) | uppercase}}
+            </div>
+            <span>{{client.name}}</span>
+        </div>
+
+        <span *ngIf="title" class="title"> {{ title | uppercase }}</span>
         <mat-nav-list>
             <ng-container *ngFor="let tab of tabs">
                 <a mat-list-item [routerLink]="[tab.url]" routerLinkActive="active"

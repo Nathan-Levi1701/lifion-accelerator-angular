@@ -1,11 +1,17 @@
 :host {
     position: relative;
+    display: block;
+    width: 100%;
+    height: calc(100vh - 395px) !important;
+    margin-top: 1rem;
 }
 
-.chart {
-    height: 500px;
+#chart {
+    height: 100%;
     width: 100%;
     position: relative;
+    background-color: whitesmoke !important;
+    border-radius: 6px;
 }
 
 .add_icon {
@@ -30,4 +36,15 @@
 
 .add_icon:hover {
     cursor: pointer;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem 0;
+
+    .right {
+        display: inherit;
+        gap: 1rem;
+    }
 }

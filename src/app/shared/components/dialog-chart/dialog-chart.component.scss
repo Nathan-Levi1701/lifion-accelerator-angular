@@ -3,8 +3,13 @@
     width: 520px;
 }
 
+.title {
+    font-weight: bold;
+}
+
 mat-dialog-content {
     padding: 20px;
+    width: 520px;
 
     form {
         display: flex;

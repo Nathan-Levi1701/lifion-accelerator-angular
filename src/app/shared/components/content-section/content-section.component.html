@@ -1,0 +1,6 @@
+<div class="container">
+    <ng-container *ngIf="section" [ngSwitch]="section">
+        <organization-chart *ngSwitchCase="'enterprise-structure'"></organization-chart>
+        <form-group *ngSwitchDefault></form-group>
+    </ng-container>
+</div>

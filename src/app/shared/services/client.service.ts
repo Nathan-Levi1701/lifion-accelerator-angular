@@ -39,6 +39,7 @@ export class ClientService {
       updatedAt: new Date(),
       createdAt: new Date()
     });
+
     return clientRef
   }
 

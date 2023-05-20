@@ -1,5 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import OrgChart from '@balkangraph/orgchart.js';
+import { EnterpriseNode } from '~/interfaces/Enterprise.interface';
 import { DialogService } from '~/services/dialog.service';
 
 @Component({
@@ -14,7 +15,7 @@ export class OrganizationChartComponent implements OnInit {
     field_1: "name",
     field_2: 'role'
   };
-  public nodes: Array<any> = [];
+  public nodes: Array<EnterpriseNode> = [];
 
   public roles = [
     { value: "area", text: "Area" },
@@ -175,7 +176,7 @@ export class OrganizationChartComponent implements OnInit {
       enableSearch: false,
       nodeMenu: {
         add: { text: "Add Node", onClick: (nodeId: string) => { this.addNode(nodeId) } },
-        edit: { text: "Edit Node", onClick: () => { } },
+        edit: { text: "Edit Node", onClick: (nodeId: string) => { this.editNode(nodeId) } },
         remove: { text: "Delete Node", onClick: (nodeId: string) => { this.deleteNode(this.orgChart, nodeId) } },
       },
       tags: {
@@ -199,7 +200,7 @@ export class OrganizationChartComponent implements OnInit {
           template: 'root',
           nodeMenu: {
             add: { text: 'Add Sub Structure', onClick: (nodeId: string) => { this.addSubRootNode(nodeId) } },
-            edit: { text: "Edit Node", onClick: () => { } },
+            edit: { text: "Edit Node", onClick: (nodeId: string) => { this.editNode(nodeId) } },
             remove: { text: "Delete Node", onClick: (nodeId: string) => { this.deleteNode(this.orgChart, nodeId) } },
           }
         },
@@ -211,7 +212,7 @@ export class OrganizationChartComponent implements OnInit {
           template: 'subRoot',
           nodeMenu: {
             add: { text: "Add Node", onClick: (nodeId: string) => { this.addNode(nodeId) } },
-            edit: { text: "Edit Node", onClick: () => { } },
+            edit: { text: "Edit Node", onClick: (nodeId: string) => { this.editNode(nodeId) } },
             remove: { text: "Delete Node", onClick: (nodeId: string) => { this.deleteNode(this.orgChart, nodeId) } },
           }
         },
@@ -232,7 +233,7 @@ export class OrganizationChartComponent implements OnInit {
       name: '',
       code: 'EU-0',
       reportsToCode: '',
-      role: 'root',
+      role: 'Root',
       parentStructure: 'Enterprise Structure',
       childStructure: 'Enterprise Substructure 13',
       relationship: 'partOf',
@@ -242,7 +243,6 @@ export class OrganizationChartComponent implements OnInit {
     const response = await this.dialogService.openDialogChart({ title: 'Add Root Structure', nodeType: 'root', roles: [{ value: 'root', text: 'Root' }], node });
 
     if (response) {
-      console.log(response)
       this.orgChart.addNode(response)
     }
   }
@@ -253,10 +253,10 @@ export class OrganizationChartComponent implements OnInit {
       pid: nodeId,
       name: '',
       code: 'EU-13',
-      reportsToCode: this.nodes.find((n) => { return n.id === nodeId }).code,
-      role: 'root',
-      parentStructure: this.nodes.find((n) => { return n.id === nodeId }).childStructure,
-      childStructure: this.nodes.find((n) => { return n.id === nodeId }).childStructure,
+      reportsToCode: this.nodes.find((n) => { return n.id === nodeId })?.code,
+      role: 'Root',
+      parentStructure: this.nodes.find((n) => { return n.id === nodeId })?.childStructure,
+      childStructure: this.nodes.find((n) => { return n.id === nodeId })?.childStructure,
       relationship: 'partOf',
       tags: ['subRoot'],
     }
@@ -273,12 +273,12 @@ export class OrganizationChartComponent implements OnInit {
       id: OrgChart.randomId(),
       pid: nodeId,
       code: '',
-      reportsToCode: this.nodes.find((n) => { return n.id === nodeId }).code,
+      reportsToCode: this.nodes.find((n) => { return n.id === nodeId })?.code,
       name: '',
       role: 'Area',
       relationship: 'partOf',
-      parentStructure: this.nodes.find((n) => { return n.id === nodeId }).childStructure,
-      childStructure: this.nodes.find((n) => { return n.id === nodeId }).childStructure,
+      parentStructure: this.nodes.find((n) => { return n.id === nodeId })?.childStructure,
+      childStructure: this.nodes.find((n) => { return n.id === nodeId })?.childStructure,
       tags: ['area']
     }
 
@@ -286,6 +286,24 @@ export class OrganizationChartComponent implements OnInit {
 
     if (response) {
       this.orgChart.addNode(response)
+    }
+  }
+
+  public async editNode(nodeId: string) {
+    const node = this.nodes.find((node) => { return node.id === nodeId });
+
+    console.log(node)
+
+    let roles: Array<{ value: string, text: string }> = this.roles;
+
+    if (node?.tags.includes('root')) {
+      roles = [{ value: 'root', text: 'Root' }]
+    }
+
+    const response = await this.dialogService.openDialogChart({ title: 'Edit Node', nodeType: node?.tags.join(''), roles: roles, node });
+
+    if (response) {
+      this.orgChart.updateNode(response)
     }
   }
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { db } from '../../firebase/config';
-import { getDocs, collection, orderBy, query, QueryDocumentSnapshot, DocumentData } from 'firebase/firestore';
+import { getDocs, collection, orderBy, query, QueryDocumentSnapshot, DocumentData, getDoc, doc } from 'firebase/firestore';
 import { Observable, BehaviorSubject } from 'rxjs';
 
 @Injectable({
@@ -14,6 +14,17 @@ export class QuestionService {
   constructor() {
     this.questionObservable = this.questionSubject.asObservable();
     this.questionObservable = this.questionSubject.asObservable();
+  }
+
+  public async getSections(tab: string) {
+    let response: any = {};
+
+    const document = await getDoc(doc(db, `hcm/${tab}`));
+    if (document.exists()) {
+      response = document.data()
+    }
+
+    return response;
   }
 
   public async getQuestions(tab: string, section: string) {

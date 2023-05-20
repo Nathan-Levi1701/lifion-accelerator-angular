@@ -4,8 +4,6 @@ import { FormGroupComponent } from './form-group.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../../../modules/material.module';
 import { FormInputModule } from '../form-input/form-input.module';
-
-
 @NgModule({
   declarations: [FormGroupComponent],
   imports: [

@@ -1,4 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import Client from '~/interfaces/Client.interface';
 import { ToolbarService } from '~/services/toolbar.service';
 
 @Component({
@@ -8,8 +10,10 @@ import { ToolbarService } from '~/services/toolbar.service';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   public state: boolean = true;
+  public client: Client = {} as any;
 
-  constructor(public toolbarService: ToolbarService) { }
+  constructor(public activatedRoute: ActivatedRoute, public toolbarService: ToolbarService) {
+  }
 
   ngOnInit(): void {
     this.toolbarService.toggleMenuObservable.subscribe((state: boolean) => {

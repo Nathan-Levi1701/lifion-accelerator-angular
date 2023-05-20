@@ -20,8 +20,4 @@ export class ToolbarService {
   public toggleMenu(state: boolean) {
     this.toggleMenuSubject.next(state);
   }
-
-  public loadTabs(tabs: Array<any>) {
-    this.tabsSubject.next(tabs)
-  }
 }

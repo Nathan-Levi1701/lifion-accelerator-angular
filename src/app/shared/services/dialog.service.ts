@@ -11,7 +11,7 @@ export class DialogService {
   }
 
   public openDialogChart(data?: any) {
-    const response = lastValueFrom(this.dialog.open(DialogChartComponent, { data: data }).afterClosed());
+    const response = lastValueFrom(this.dialog.open(DialogChartComponent, { data: data, disableClose: true }).afterClosed());
     return response;
   }
 }

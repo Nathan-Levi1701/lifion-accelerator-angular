@@ -1,5 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Data, Router } from '@angular/router';
+import { ActivatedRoute, Data, NavigationEnd, NavigationStart, Router, RouterEvent } from '@angular/router';
+import { filter, map, mergeMap, tap } from 'rxjs';
+import Client from '~/interfaces/Client.interface';
 import { ClientService } from '~/services/client.service';
 import { ToolbarService } from '~/services/toolbar.service';
 
@@ -9,49 +11,62 @@ import { ToolbarService } from '~/services/toolbar.service';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavBarComponent implements OnInit, OnDestroy {
-  public router: Router;
   public title: string = '';
   public tabs: Array<any> = [];
+  public client: Client = {} as any;
 
-  constructor(public activatedRoute: ActivatedRoute, public toolbarService: ToolbarService, public clientService: ClientService, router: Router) {
-    this.router = router;
-
+  constructor(public activatedRoute: ActivatedRoute, public toolbarService: ToolbarService, public clientService: ClientService, public router: Router) {
     toolbarService.tabsObservable.subscribe((tabs) => {
       this.tabs = tabs;
-    })
+    });
 
-    this.activatedRoute.params.subscribe(async (params) => {
-      if (params['tab']) {
-        this.title = params['tab'].replaceAll('-', ' ');
-      }
-
-      if (params['clientId']) {
-        this.tabs.forEach((tab) => {
-          tab.url = tab.url.replace('clientId', params['clientId'])
-        })
-
-        const response = await this.clientService.get(params['clientId']);
-        this.clientService.clientSubject.next(response);
-      }
-
-      if (!params['clientId']) {
-        this.tabs = []
+    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((e: any) => {
+      if (e.url === '/') {
+        this.title = ''
       }
     })
 
-    activatedRoute.data.subscribe((data: Data) => {
-      if (data['title']) {
-        this.title = data['title'];
-      }
-    })
+    this.router.events.pipe(filter((event) => event instanceof NavigationEnd), map(() => this.activatedRoute), map((route) => {
+      while (route.firstChild) route = route.firstChild;
+      return route;
+    }),
+      mergeMap((route) => route.data)).subscribe(async (data) => {
+        if (data['title']) {
+          this.title = data['title'];
+        }
+      })
+
+    this.router.events.pipe(filter((event) => event instanceof NavigationEnd), map(() => this.activatedRoute), map((route) => {
+      while (route.firstChild) route = route.firstChild;
+      return route;
+    }),
+      mergeMap((route) => route.params)).subscribe(async (params) => {
+        if (params['tab']) {
+          this.title = params['tab'].replaceAll('-', ' ');
+        }
+
+        if (params['clientId']) {
+          this.tabs.forEach((tab) => {
+            tab.url = tab.url.replace('clientId', params['clientId'])
+          })
+
+          const response = await this.clientService.get(params['clientId']);
+          this.clientService.clientSubject.next(response);
+          this.client = response;
+        }
+
+        if (!params['clientId']) {
+          this.tabs = []
+        }
+      })
   }
+
 
   ngOnInit(): void {
 
   }
 
   ngOnDestroy(): void {
-    // this.toolbarService.toggleMenuSubject.unsubscribe();
   }
 
 }

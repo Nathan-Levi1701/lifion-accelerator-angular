@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { LayoutOneModule } from '~/layouts/layout-one/layout-one.module';
 import { ClientRoutingModule } from './client-routing.module';
 import { NavBarModule } from '~/components/navbar/navbar.module';
-import { FormGroupModule } from '~/components/form-group/form-group.module';
-import { OrganizationChartModule } from '~/components/organization-chart/organization-chart.module';
+import { HeaderSectionModule } from '~/components/header-section/header-section.module';
+import { ContentSectionModule } from '~/components/content-section/content-section.module';
 
 @NgModule({
   declarations: [],
@@ -12,9 +12,9 @@ import { OrganizationChartModule } from '~/components/organization-chart/organiz
     CommonModule,
     NavBarModule,
     LayoutOneModule,
-    FormGroupModule,
+    HeaderSectionModule,
+    ContentSectionModule,
     ClientRoutingModule,
-    OrganizationChartModule,
   ]
 })
 

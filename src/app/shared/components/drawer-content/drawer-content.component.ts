@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { filter, map, mergeMap } from 'rxjs';
 import Client from '~/interfaces/Client.interface';
 import { ClientService } from '~/services/client.service';
 import { ToolbarService } from '~/services/toolbar.service';
@@ -243,20 +244,25 @@ export class DrawerContentComponent implements OnInit, OnDestroy {
 
 
   constructor(public router: Router, public activatedRoute: ActivatedRoute, public toolbarService: ToolbarService, public clientService: ClientService) {
-    this.activatedRoute.params.subscribe((params) => {
-      if (params['tab']) {
-        const x = this.navigation.find((tab: { url: any; }) => { return tab.url === params['tab'] }).children
-        x.forEach((y: any) => {
-          console.log(x)
-          y.url = y.url.replace('clientId', params['clientId'])
-        })
-        this.toolbarService.loadTabs(x)
-      }
-    })
+    this.router.events.pipe(filter((event) => event instanceof NavigationEnd), map(() => this.activatedRoute), map((route) => {
+      while (route.firstChild) route = route.firstChild;
+      return route;
+    }),
+      mergeMap((route) => route.params)).subscribe(async (params) => {
+        if (params['tab'] && params['clientId']) {
+          let x = this.navigation.find((tab: { url: any; }) => { return (tab.url as string).includes(params['tab']) }).children
 
-    this.clientService.clientObservable.subscribe((client: Client) => {
-      if (client && client.id) {
-        this.clientId = client.id
+          for (let i = 0; i < x.length; i++) {
+            x[i].url = x[i].url.replace('clientId', params['clientId'])
+          }
+
+          this.toolbarService.tabsSubject.next(x);
+        }
+      })
+
+    clientService.clientObservable.subscribe((client) => {
+      if (client.id) {
+        this.clientId = client.id;
       }
     })
   }
@@ -266,8 +272,13 @@ export class DrawerContentComponent implements OnInit, OnDestroy {
   }
 
   public async onNavigation(index: number, children: Array<any>) {
-    this.router.navigateByUrl(children[index].url?.replace('clientId', this.clientId) ?? this.navigation[0].url)
-    this.toolbarService.tabsSubject.next(children)
+    if (this.clientId) {
+
+      this.router.navigate([children[index].url?.replace('clientId', this.clientId)])
+      this.toolbarService.tabsSubject.next(children)
+    } else {
+      this.router.navigateByUrl('/view/clients');
+    }
   }
 
   ngOnDestroy(): void {

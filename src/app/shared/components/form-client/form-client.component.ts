@@ -1,8 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { setDoc, doc, addDoc, collection } from 'firebase/firestore';
 import { ClientService } from '~/services/client.service';
-
+import { FormService } from '~/services/form.service';
+import { QuestionService } from '~/services/question.service';
+import { db } from '../../../firebase/config';
 @Component({
   selector: 'form-client',
   templateUrl: './form-client.component.html',
@@ -13,7 +16,7 @@ import { ClientService } from '~/services/client.service';
 export class FormClientComponent implements OnInit, OnDestroy {
   public formGroup: FormGroup = new FormGroup({});
 
-  constructor(public fb: FormBuilder, public clientService: ClientService, public activatedRoute: ActivatedRoute, public router: Router) {
+  constructor(public fb: FormBuilder, public clientService: ClientService, public formService: FormService, public questionService: QuestionService, public activatedRoute: ActivatedRoute, public router: Router) {
     this.formGroup = fb.group({
       id: [''],
       name: ['', [Validators.required]],
@@ -34,15 +37,32 @@ export class FormClientComponent implements OnInit, OnDestroy {
   }
 
   async onSubmit(formGroup: FormGroup) {
-    console.log(formGroup.value)
     if (formGroup.valid) {
       if (formGroup.get('id')?.value) {
         await this.clientService.update(formGroup.value);
         this.router.navigateByUrl('/view/clients');
 
       } else {
-        await this.clientService.create(formGroup.value);
-        this.router.navigateByUrl('/view/clients');
+        const response = await this.clientService.create(formGroup.value);
+        const sections = await this.questionService.getSections('hr-structure');
+
+        let questions: Array<any> = [];
+
+        for await (const section of sections['sections']) {
+          questions.push(await this.questionService.getQuestions('hr-structure', section));
+        }
+
+        let index = 0;
+
+        for await (const section of questions) {
+          await setDoc(doc(db, `clients/${response.id}/hr-structure/${sections['sections'][index]}`), { sections: section.map((p: any) => { return p.id }) });
+          for await (const subSection of section) {
+            await addDoc(collection(db, `clients/${response.id}/hr-structure/${sections['sections'][index]}/${subSection.id}`), { data: subSection.data });
+          }
+          ++index;
+        }
+
+        this.router.navigateByUrl(`client/${response.id}/hr-structure/process-questions`);
       }
     }
   }

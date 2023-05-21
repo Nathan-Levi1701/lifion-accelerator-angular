@@ -11,6 +11,8 @@ import { FormGroup, Validators } from '@angular/forms';
 export class TabReviewComponent implements OnInit {
   @Input() formGroups: Array<any> = [];
   @Input() clientId: string = '';
+  @Input() tab: string = '';
+  @Input() section: string = '';
   @Output() onPreviousTab = new EventEmitter<boolean>(false);
   @ViewChildren(FormInputComponent) formInputs?: QueryList<FormInputComponent>;
 
@@ -51,7 +53,7 @@ export class TabReviewComponent implements OnInit {
         const subSection = fg.formTitle!;
         const docId = fg.docId!;
 
-        promises.push(this.formService.updateForm(this.clientId, 'hr-structure', 'process-questions', subSection, docId, submission))
+        promises.push(this.formService.updateForm(this.clientId, this.tab, this.section, subSection, docId, submission))
       })
 
       await Promise.all(promises);

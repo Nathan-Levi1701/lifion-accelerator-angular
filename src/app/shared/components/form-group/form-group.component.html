@@ -17,7 +17,8 @@
     </mat-tab>
     <mat-tab label="Review">
         <ng-template matTabContent>
-            <tab-review [clientId]="clientId" [formGroups]="formGroups" (onPreviousTab)="onBack()"></tab-review>
+            <tab-review [clientId]="clientId" [tab]="tab" [section]="section" [formGroups]="formGroups"
+                (onPreviousTab)="onBack()"></tab-review>
         </ng-template>
     </mat-tab>
 </mat-tab-group>

@@ -1,0 +1,31 @@
+:host {
+    display: block;
+    width: 100%;
+}
+
+mat-toolbar {
+    background: #C2185B;
+    height: 50px !important;
+
+    mat-nav-list {
+        padding: 0;
+        display: flex;
+
+
+        span {
+            font-weight: bold;
+            font-size: 14px;
+            color: #fff;
+        }
+
+        a {
+            height: 40px !important;
+            width: auto;
+            margin-right: 5px;
+        }
+
+        .active {
+            border-bottom: 3px solid #fff !important;
+        }
+    }
+}

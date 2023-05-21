@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LayoutOneModule } from '~/layouts/layout-one/layout-one.module';
 import { ClientsRoutingModule } from './clients-routing.module';
-import { NavBarModule } from '~/components/navbar/navbar.module';
+import { NavBarSectionModule } from '~/components/navbar-section/navbar-section.module';
 import { FormGroupModule } from '~/components/form-group/form-group.module';
 import { LayoutBlankModule } from '~/layouts/layout-blank/layout-blank.module';
 import { LayoutClientsModule } from '~/layouts/layout-clients/layout-clients.module';
@@ -14,7 +14,7 @@ import { TableClientModule } from '~/components/table-client/table-client.module
   declarations: [],
   imports: [
     CommonModule,
-    NavBarModule,
+    NavBarSectionModule,
     LayoutOneModule,
     LayoutBlankModule,
     LayoutClientsModule,

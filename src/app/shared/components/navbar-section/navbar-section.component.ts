@@ -6,11 +6,11 @@ import { ClientService } from '~/services/client.service';
 import { ToolbarService } from '~/services/toolbar.service';
 
 @Component({
-  selector: 'navbar',
-  templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.scss']
+  selector: 'navbar-section',
+  templateUrl: './navbar-section.component.html',
+  styleUrls: ['./navbar-section.component.scss']
 })
-export class NavBarComponent implements OnInit, OnDestroy {
+export class NavBarSectionComponent implements OnInit, OnDestroy {
   public title: string = '';
   public tabs: Array<any> = [];
   public client: Client = {} as any;

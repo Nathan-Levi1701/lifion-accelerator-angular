@@ -1,9 +1,10 @@
 :host {
     display: block;
+    height: 100%;
+    width: 100%;
 }
 
 .container {
-    padding: 2rem;
     width: calc(100% - 300px);
     margin: auto;
 }

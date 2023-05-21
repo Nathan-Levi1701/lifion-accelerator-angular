@@ -5,7 +5,7 @@
         <mat-error *ngIf="formGroup.get('name')?.hasError('required')">This field is required</mat-error>
     </mat-form-field>
     <div class="footer">
+        <button mat-button type="reset" routerLink="/view/clients">Cancel</button>
         <button mat-flat-button color="primary" type="submit">Save</button>
-        <button mat-flat-button color="warn" type="reset" routerLink="/view/clients">Cancel</button>
     </div>
 </form>

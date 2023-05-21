@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Data, NavigationEnd, NavigationStart, Router, RouterEvent } from '@angular/router';
-import { filter, map, mergeMap, tap } from 'rxjs';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { filter, map, mergeMap } from 'rxjs';
 import Client from '~/interfaces/Client.interface';
 import { ClientService } from '~/services/client.service';
 import { ToolbarService } from '~/services/toolbar.service';
@@ -46,13 +46,21 @@ export class NavBarSectionComponent implements OnInit, OnDestroy {
         }
 
         if (params['clientId']) {
-          this.tabs.forEach((tab) => {
-            tab.url = tab.url.replace('clientId', params['clientId'])
-          })
-
           const response = await this.clientService.get(params['clientId']);
           this.clientService.clientSubject.next(response);
           this.client = response;
+
+          this.tabs.forEach((tab) => {
+            if (tab.url.includes('clientId')) {
+              tab.url = tab.url.replace('clientId', params['clientId'])
+            } else {
+              const a = (tab.url as string).split('/');
+              a[2] = params['clientId'];
+              tab.url = a.join('/')
+            }
+          })
+
+          this.toolbarService.tabsSubject.next(this.tabs)
         }
 
         if (!params['clientId']) {

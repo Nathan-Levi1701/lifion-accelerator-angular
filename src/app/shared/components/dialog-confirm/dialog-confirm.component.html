@@ -1,0 +1,9 @@
+<h2 class="title" mat-dialog-title>{{data.title}}</h2>
+<mat-divider></mat-divider>
+<mat-dialog-content>
+    <h3>{{data.message }}</h3>
+    <div class="footer">
+        <button mat-button color="primary" (click)="dialogRef.close(false)">No</button>
+        <button color="primary" mat-flat-button (click)="dialogRef.close(true)">Yes</button>
+    </div>
+</mat-dialog-content>

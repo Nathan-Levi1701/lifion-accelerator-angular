@@ -177,7 +177,7 @@ export class OrganizationChartComponent implements OnInit {
       nodeMenu: {
         add: { text: "Add Node", onClick: (nodeId: string) => { this.addNode(nodeId) } },
         edit: { text: "Edit Node", onClick: (nodeId: string) => { this.editNode(nodeId) } },
-        remove: { text: "Delete Node", onClick: (nodeId: string) => { this.deleteNode(this.orgChart, nodeId) } },
+        remove: { text: "Delete Node", onClick: (nodeId: string) => { this.deleteNode(nodeId) } },
       },
       tags: {
         area: { template: 'area' },
@@ -201,7 +201,7 @@ export class OrganizationChartComponent implements OnInit {
           nodeMenu: {
             add: { text: 'Add Sub Structure', onClick: (nodeId: string) => { this.addSubRootNode(nodeId) } },
             edit: { text: "Edit Node", onClick: (nodeId: string) => { this.editNode(nodeId) } },
-            remove: { text: "Delete Node", onClick: (nodeId: string) => { this.deleteNode(this.orgChart, nodeId) } },
+            remove: { text: "Delete Node", onClick: (nodeId: string) => { this.deleteNode(nodeId) } },
           }
         },
         sector: { template: 'sector' },
@@ -213,7 +213,7 @@ export class OrganizationChartComponent implements OnInit {
           nodeMenu: {
             add: { text: "Add Node", onClick: (nodeId: string) => { this.addNode(nodeId) } },
             edit: { text: "Edit Node", onClick: (nodeId: string) => { this.editNode(nodeId) } },
-            remove: { text: "Delete Node", onClick: (nodeId: string) => { this.deleteNode(this.orgChart, nodeId) } },
+            remove: { text: "Delete Node", onClick: (nodeId: string) => { this.deleteNode(nodeId) } },
           }
         },
         tier: { template: 'tier' },
@@ -292,8 +292,6 @@ export class OrganizationChartComponent implements OnInit {
   public async editNode(nodeId: string) {
     const node = this.nodes.find((node) => { return node.id === nodeId });
 
-    console.log(node)
-
     let roles: Array<{ value: string, text: string }> = this.roles;
 
     if (node?.tags.includes('root')) {
@@ -307,11 +305,11 @@ export class OrganizationChartComponent implements OnInit {
     }
   }
 
-  public deleteNode(orgChart: OrgChart, nodeId: string) {
-    orgChart.removeNode(nodeId)
-    // console.log(this.nodes)
-    // const index = this.nodes.find((node) => { return node.id === nodeId });
-    // this.nodes.splice(index, 1);
-    // this.orgChart.draw()
+  public async deleteNode(nodeId: string) {
+    const response = await this.dialogService.openDialogConfirm({ title: 'Confirm Deletion', message: 'Are you sure you wish to delete this node?' });
+
+    if (response) {
+      this.orgChart.removeNode(nodeId);
+    }
   }
 }

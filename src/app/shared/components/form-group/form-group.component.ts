@@ -1,10 +1,11 @@
-import { Component, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ClientService } from '~/services/client.service';
 import { FormService } from '~/services/form.service';
 import { FormInputComponent } from '../form-input/form-input.component';
 import { ToolbarService } from '~/services/toolbar.service';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
 @Component({
   selector: 'form-group',
@@ -13,7 +14,7 @@ import { ToolbarService } from '~/services/toolbar.service';
 })
 
 
-export class FormGroupComponent implements OnInit, OnDestroy {
+export class FormGroupComponent implements OnInit, OnDestroy, AfterViewInit {
   public formGroups: Array<{ title: string, docId: string, formLabels: Array<string>, form: FormGroup }> = [];
   public formLabels: Array<string> = [];
   public selectedIndex: number = 0;
@@ -24,6 +25,14 @@ export class FormGroupComponent implements OnInit, OnDestroy {
   @ViewChildren(FormInputComponent) formInputs?: QueryList<FormInputComponent>;
 
   constructor(public activatedRoute: ActivatedRoute, public toolbarService: ToolbarService, public formService: FormService, public fb: FormBuilder, public clientService: ClientService) {
+  }
+
+  ngAfterViewInit(): void {
+
+  }
+
+  public selectedTabChanged(tabChangeEvent: MatTabChangeEvent) {
+
   }
 
 
@@ -40,7 +49,6 @@ export class FormGroupComponent implements OnInit, OnDestroy {
         if (subSections && subSections['sections']) {
           subSections['sections'].forEach(async (subSection: string) => {
             const response = await this.formService.getForms(this.clientId, this.tab, this.section, subSection);
-            console.log(response)
             this.buildForms(response);
           });
         }
@@ -85,8 +93,11 @@ export class FormGroupComponent implements OnInit, OnDestroy {
       const subSection = this.formInputs?.get(this.selectedIndex)?.formTitle!;
       const docId = this.formInputs?.get(this.selectedIndex)?.docId!;
 
-      await this.formService.updateForm(this.clientId, this.tab, this.section, subSection, docId, submission);
-      this.selectedIndex = this.selectedIndex + 1;
+      // await this.formService.updateForm(this.clientId, this.tab, this.section, subSection, docId, submission);
+
+      this.formService.formSubject.next({ tab: this.tab, section: this.section, subSection: subSection, docId: docId, data: form });
+
+      // this.selectedIndex = this.selectedIndex + 1;
     }
   }
 

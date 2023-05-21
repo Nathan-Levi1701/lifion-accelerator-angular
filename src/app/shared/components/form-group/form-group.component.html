@@ -1,4 +1,5 @@
-<mat-tab-group *ngIf="formGroups.length > 0" animationDuration="0ms" dynamicHeight [(selectedIndex)]="selectedIndex">
+<mat-tab-group *ngIf="formGroups.length > 0" animationDuration="0ms" dynamicHeight [(selectedIndex)]="selectedIndex"
+    (selectedTabChange)="selectedTabChanged($event)">
     <mat-tab *ngFor="let formGroup of formGroups; index as i" [label]="(formGroup.title.replace('-', ' ')) | titlecase"
         [disabled]="false">
         <h3>{{(formGroup.title.replace('-', ' ')) | titlecase}}</h3>

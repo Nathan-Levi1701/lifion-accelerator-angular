@@ -48,7 +48,10 @@
       ],
       "~/interfaces/*": [
         "app/shared/interfaces/*"
-      ]
+      ],
+      "exceljs": [
+        "node_modules/exceljs/dist/exceljs.min"
+      ],
     }
   },
   "angularCompilerOptions": {

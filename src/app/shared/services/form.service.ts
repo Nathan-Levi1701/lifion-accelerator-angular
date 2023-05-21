@@ -6,15 +6,11 @@ import { setDoc, doc, addDoc, collection, DocumentData, QueryDocumentSnapshot, g
   providedIn: 'root'
 })
 export class FormService {
-  public formSubmitObservable = new Observable<boolean>();
-  public formSubmitSubject = new BehaviorSubject<boolean>(false);
-
-  public formResetObservable = new Observable<boolean>();
-  public formResetSubject = new BehaviorSubject<boolean>(false);
+  public formObservable = new Observable<any>();
+  public formSubject = new BehaviorSubject<any>({});
 
   constructor() {
-    this.formSubmitObservable = this.formSubmitSubject.asObservable();
-    this.formResetObservable = this.formResetSubject.asObservable();
+    this.formObservable = this.formSubject.asObservable();
   }
 
   public async addForm(clientId: string, tab: string, section: string, subSection: string, allSections: Array<string>, form: any) {

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { FormService } from '~/services/form.service';
 
 @Component({
   selector: 'header-section',
@@ -8,8 +9,9 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class HeaderSectionComponent implements OnInit {
   public title: string = '';
+  public documentId: string = '';
 
-  constructor(public activatedRoute: ActivatedRoute) {
+  constructor(public activatedRoute: ActivatedRoute, public formService: FormService) {
     this.activatedRoute.params.subscribe((params) => {
       this.title = params['section'];
     })

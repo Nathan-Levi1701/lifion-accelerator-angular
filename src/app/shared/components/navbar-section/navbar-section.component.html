@@ -1,4 +1,4 @@
-<nav>
+<nav *ngIf="title || client.id">
     <mat-toolbar>
         <div *ngIf="client && client.id" class="client">
             <div class="avatar">

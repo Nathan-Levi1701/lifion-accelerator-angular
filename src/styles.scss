@@ -10,34 +10,20 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-@mixin mediaQuery($size) {
-  @if $size ==xs {
-    @media (max-width: 576px) {
-      @content;
-    }
+.mat-mdc-snack-bar-container {
+
+
+  &.custom {
+    margin: 0 !important;
+    position: absolute;
+    bottom: 100px;
   }
 
-  @else if $size ==sm {
-    @media (min-width: 768px) {
-      @content;
-    }
+  &.success {
+    --mdc-snackbar-container-color: #00C853;
   }
 
-  @else if $size ==med {
-    @media (min-width: 992) {
-      @content;
-    }
-  }
-
-  @else if $size ==lg {
-    @media (min-width: 1200px) {
-      @content;
-    }
-  }
-
-  @else if $size ==xl {
-    @media (min-width: 1400px) {
-      @content;
-    }
+  &.error {
+    --mdc-snackbar-container-color: #d50000;
   }
 }

@@ -93,11 +93,9 @@ export class FormGroupComponent implements OnInit, OnDestroy, AfterViewInit {
       const subSection = this.formInputs?.get(this.selectedIndex)?.formTitle!;
       const docId = this.formInputs?.get(this.selectedIndex)?.docId!;
 
-      // await this.formService.updateForm(this.clientId, this.tab, this.section, subSection, docId, submission);
-
+      await this.formService.updateForm(this.clientId, this.tab, this.section, subSection, docId, submission);
       this.formService.formSubject.next({ tab: this.tab, section: this.section, subSection: subSection, docId: docId, data: form });
-
-      // this.selectedIndex = this.selectedIndex + 1;
+      this.selectedIndex = this.selectedIndex + 1;
     }
   }
 

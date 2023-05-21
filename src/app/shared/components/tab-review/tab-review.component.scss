@@ -1,0 +1,21 @@
+:host {
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+
+.container {
+    overflow: auto;
+    height: 845px;
+    padding-right: 2rem;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+
+    .right {
+        display: inherit;
+        gap: 1rem;
+    }
+}

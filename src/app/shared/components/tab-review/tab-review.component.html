@@ -1,0 +1,17 @@
+<h3>Review</h3>
+<div class="container">
+    <mat-divider></mat-divider>
+    <ng-container *ngFor="let formGroup of formGroups">
+        <h3>{{(formGroup.title.replace('-', ' ')) | titlecase}}</h3>
+        <form-input [formGroup]="formGroup.form" [formLabels]="formGroup.formLabels" [formTitle]="formGroup.title"
+            [docId]="formGroup.docId">
+        </form-input>
+    </ng-container>
+    <div class="footer">
+        <button mat-flat-button type="button" color="accent" (click)="onBack()">Back</button>
+        <div class="right">
+            <button mat-button type="button" color="primary" (click)="onReset()">Cancel</button>
+            <button mat-flat-button type="button" color="primary" (click)="onSubmit()">Save</button>
+        </div>
+    </div>
+</div>

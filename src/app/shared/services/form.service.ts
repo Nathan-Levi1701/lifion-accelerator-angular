@@ -32,7 +32,7 @@ export class FormService {
     let response: any = {};
 
     try {
-      response = await updateDoc(doc(db, `clients/${clientId}/${tab}/${section}/${subSection}/${documentId}`), { data: form });
+      response = updateDoc(doc(db, `clients/${clientId}/${tab}/${section}/${subSection}/${documentId}`), { data: form });
       this.feedbackService.showFeedback('Success: Section updated', 'success');
     } catch (error) {
       this.feedbackService.showFeedback(`Error: ${error}`, 'error');

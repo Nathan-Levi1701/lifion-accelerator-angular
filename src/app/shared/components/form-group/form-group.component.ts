@@ -1,11 +1,10 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ClientService } from '~/services/client.service';
 import { FormService } from '~/services/form.service';
 import { FormInputComponent } from '../form-input/form-input.component';
 import { ToolbarService } from '~/services/toolbar.service';
-import { MatTabChangeEvent } from '@angular/material/tabs';
 
 @Component({
   selector: 'form-group',
@@ -14,7 +13,7 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 })
 
 
-export class FormGroupComponent implements OnInit, OnDestroy, AfterViewInit {
+export class FormGroupComponent implements OnInit, OnDestroy {
   public formGroups: Array<{ title: string, docId: string, formLabels: Array<string>, form: FormGroup }> = [];
   public formLabels: Array<string> = [];
   public selectedIndex: number = 0;
@@ -26,15 +25,6 @@ export class FormGroupComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(public activatedRoute: ActivatedRoute, public toolbarService: ToolbarService, public formService: FormService, public fb: FormBuilder, public clientService: ClientService) {
   }
-
-  ngAfterViewInit(): void {
-
-  }
-
-  public selectedTabChanged(tabChangeEvent: MatTabChangeEvent) {
-
-  }
-
 
   async ngOnInit(): Promise<void> {
     this.activatedRoute.params.subscribe(async (params) => {
@@ -87,7 +77,9 @@ export class FormGroupComponent implements OnInit, OnDestroy, AfterViewInit {
           id: Object.keys(form.formGroup.value)[i],
           label: l,
           value: Object.values(form.formGroup.value)[i],
-          validators: {}
+          validators: {
+            required: (form.formGroup as FormGroup).get(Object.keys(form.formGroup.value)[i])?.hasValidator(Validators.required) ? { state: true, message: 'This field is required' } : { state: false, message: '' }
+          }
         })
       })
       const subSection = this.formInputs?.get(this.selectedIndex)?.formTitle!;

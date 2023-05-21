@@ -4,13 +4,15 @@ import { FormGroupComponent } from './form-group.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../../../modules/material.module';
 import { FormInputModule } from '../form-input/form-input.module';
+import { TabReviewModule } from '../tab-review/tab-review.module';
 @NgModule({
   declarations: [FormGroupComponent],
   imports: [
     CommonModule,
     MaterialModule,
     ReactiveFormsModule,
-    FormInputModule
+    FormInputModule,
+    TabReviewModule
   ],
   exports: [FormGroupComponent]
 })

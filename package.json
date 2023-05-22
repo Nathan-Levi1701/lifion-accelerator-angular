@@ -1,5 +1,5 @@
 {
-  "name": "lifion-accelerator-angular",
+  "name": "lifion-accelerator",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -26,6 +26,7 @@
     "exceljs": "^4.3.0",
     "file-saver": "^2.0.5",
     "firebase": "^9.22.0",
+    "firebase-tools": "^12.1.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.13.0"

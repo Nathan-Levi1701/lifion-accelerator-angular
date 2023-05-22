@@ -11,8 +11,11 @@
 </div>
 <div id=chart></div>
 <div class="footer">
-    <button mat-flat-button type="button" color="accent">Back</button>
-    <div class="right">
+    <div class="actions">
+        <button mat-flat-button type="button" color="accent">Back</button>
+        <button mat-button type="button" color="primary" (click)="onClear()">Clear</button>
+    </div>
+    <div class="actions">
         <button mat-button type="button" color="primary">Cancel</button>
         <button mat-flat-button type="button" color="primary" (click)="onSubmit()">Save</button>
     </div>

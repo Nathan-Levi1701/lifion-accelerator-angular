@@ -1,0 +1,13 @@
+<div class="wrapper" *ngIf="state !== 'complete'">
+    <ng-container [ngSwitch]="state">
+        <div class="spinner" *ngSwitchCase="'loading'">
+            <mat-spinner></mat-spinner>
+        </div>
+        <div class="spinner" *ngSwitchCase="'empty'">
+            <mat-icon color="primary" class="material-icons-outlined">cancel</mat-icon>
+        </div>
+        <div class="spinner" *ngSwitchCase="'error'">
+            <mat-icon color="primary">error_outline</mat-icon>
+        </div>
+    </ng-container>
+</div>

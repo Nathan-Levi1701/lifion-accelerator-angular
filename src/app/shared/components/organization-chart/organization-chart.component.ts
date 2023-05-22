@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import OrgChart from '@balkangraph/orgchart.js';
 import { EnterpriseNode } from '~/interfaces/Enterprise.interface';
 import { DialogService } from '~/services/dialog.service';
+import { FeedbackService } from '~/services/feedback.service';
 import { FormService } from '~/services/form.service';
 
 @Component({
@@ -10,10 +11,13 @@ import { FormService } from '~/services/form.service';
   templateUrl: './organization-chart.component.html',
   styleUrls: ['./organization-chart.component.scss']
 })
-export class OrganizationChartComponent implements OnInit {
-  public clientId: string = '';
-  public tab: string = '';
-  public section: string = '';
+export class OrganizationChartComponent implements OnInit, OnChanges {
+  @Input() tab: string = '';
+  @Input() section: string = '';
+  @Input() subSection: string = '';
+  @Input() clientId: string = '';
+  @Input() documentId: string = '';
+  @Input() nodes: Array<EnterpriseNode> = [];
 
   public orgChart: OrgChart = {} as any;
   private nodeBinding = {
@@ -21,7 +25,6 @@ export class OrganizationChartComponent implements OnInit {
     field_1: "name",
     field_2: 'role'
   };
-  public nodes: Array<EnterpriseNode> = [];
 
   public roles = [
     { value: "area", text: "Area" },
@@ -49,7 +52,7 @@ export class OrganizationChartComponent implements OnInit {
     { value: "zone", text: "Zone" },
   ]
 
-  constructor(public activatedRoute: ActivatedRoute, public dialogService: DialogService, public formService: FormService) {
+  constructor(public activatedRoute: ActivatedRoute, public dialogService: DialogService, public formService: FormService, public feedbackService: FeedbackService) {
     // Setting Default Template
     OrgChart.templates['defaultTemplate'] = Object.assign({}, OrgChart.templates['ana']);
     OrgChart.templates['defaultTemplate'].editFormHeaderColor = '#0d6efd';
@@ -171,6 +174,17 @@ export class OrganizationChartComponent implements OnInit {
     // Zone Template
     OrgChart.templates['zone'] = Object.assign({}, OrgChart.templates['defaultTemplate']);
     OrgChart.templates['zone'].node = '<rect x="0" y="0" height="100" width="200" fill="#CE93D8" stroke-width="1" stroke="#aeaeae" rx="7" ry="7"></rect>';
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['nodes'].currentValue && changes['nodes'].currentValue.length > 0) {
+      this.nodes = changes['nodes'].currentValue;
+      this.orgChart.load(this.nodes);
+    }
+
+    if (changes['documentId'].currentValue) {
+      this.documentId = changes['documentId'].currentValue;
+    }
   }
 
   ngOnInit(): void {
@@ -299,6 +313,8 @@ export class OrganizationChartComponent implements OnInit {
     if (response) {
       this.orgChart.addNode(response)
     }
+
+    console.log(this.nodes)
   }
 
   public async editNode(nodeId: string) {
@@ -310,7 +326,11 @@ export class OrganizationChartComponent implements OnInit {
       roles = [{ value: 'root', text: 'Root' }]
     }
 
-    const response = await this.dialogService.openDialogChart({ title: 'Edit Node', nodeType: node?.tags.join(''), roles: roles, node });
+    if (node?.tags.includes('subRoot')) {
+      roles = [{ value: 'subRoot', text: 'Root' }]
+    }
+
+    const response = await this.dialogService.openDialogChart({ title: 'Edit Node', nodeType: node?.tags.join(''), roles: roles, node, nodes: this.nodes });
 
     if (response) {
       this.orgChart.updateNode(response)
@@ -325,11 +345,20 @@ export class OrganizationChartComponent implements OnInit {
     }
   }
 
-  public async onSubmit() {
-    const response = await this.formService.getForms(this.clientId, this.tab, this.section, 'organization-chart');
+  public async onClear() {
+    const response = await this.dialogService.openDialogConfirm({ title: 'Confirm Deletion', message: 'Are you sure you wish to clear this chart?' });
 
     if (response) {
-      await this.formService.updateForm(this.clientId, this.tab, this.section, response[0].subSection, response[0].id, this.nodes)
+      this.nodes = [];
+      this.orgChart.load([]);
     }
+  }
+
+  public async onCancel() {
+
+  }
+
+  public async onSubmit() {
+    await this.formService.updateForm(this.clientId, this.tab, this.section, 'organization-chart', this.documentId, this.nodes)
   }
 }

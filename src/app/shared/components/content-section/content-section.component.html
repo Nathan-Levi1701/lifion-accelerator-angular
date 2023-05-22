@@ -1,6 +1,8 @@
 <div class="container">
     <ng-container *ngIf="section" [ngSwitch]="section">
-        <organization-chart *ngSwitchCase="'enterprise-structure'"></organization-chart>
-        <form-group *ngSwitchDefault></form-group>
+        <organization-chart [nodes]="formGroups" [tab]="tab" [section]="section" [subSection]="subSection"
+            [clientId]="clientId" [documentId]="documentId" *ngSwitchCase="'enterprise-structure'"></organization-chart>
+        <form-group [formGroups]="formGroups" [formLabels]="formLabels" [tab]="tab" [section]="section"
+            [subSection]="subSection" [clientId]="clientId" *ngSwitchDefault></form-group>
     </ng-container>
 </div>

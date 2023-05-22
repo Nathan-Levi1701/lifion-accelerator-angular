@@ -34,8 +34,7 @@
             <mat-error *ngIf="formGroup.get('role')?.hasError('required')">This field is required</mat-error>
         </mat-form-field>
         <div class="footer">
-            <button mat-flat-button (click)="dialogRef.close(null)">Cancel</button>
-            <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
+            <button mat-flat-button type="button" (click)="dialogRef.close(null)">Cancel</button>
             <button color="primary" type="submit" mat-flat-button>Save</button>
         </div>
     </form>

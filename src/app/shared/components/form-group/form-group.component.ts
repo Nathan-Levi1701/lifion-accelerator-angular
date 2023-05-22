@@ -1,5 +1,5 @@
-import { Component, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, Input, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ClientService } from '~/services/client.service';
 import { FormService } from '~/services/form.service';
@@ -14,52 +14,19 @@ import { ToolbarService } from '~/services/toolbar.service';
 
 
 export class FormGroupComponent implements OnInit, OnDestroy {
-  public formGroups: Array<{ title: string, docId: string, formLabels: Array<string>, form: FormGroup }> = [];
-  public formLabels: Array<string> = [];
-  public selectedIndex: number = 0;
-  public tab: string = '';
-  public section: string = '';
-  public subSection: string = '';
-  public clientId: string = '';
+  @Input() formGroups: Array<{ title: string, docId: string, formLabels: Array<string>, form: FormGroup }> = [];
+  @Input() formLabels: Array<string> = [];
+  @Input() selectedIndex: number = 0;
+  @Input() tab: string = '';
+  @Input() section: string = '';
+  @Input() subSection: string = '';
+  @Input() clientId: string = '';
   @ViewChildren(FormInputComponent) formInputs?: QueryList<FormInputComponent>;
 
   constructor(public activatedRoute: ActivatedRoute, public toolbarService: ToolbarService, public formService: FormService, public fb: FormBuilder, public clientService: ClientService) {
   }
 
-  async ngOnInit(): Promise<void> {
-    this.activatedRoute.params.subscribe(async (params) => {
-      this.formGroups = [];
-      this.formLabels = [];
-      this.clientId = params['clientId'];
-      this.tab = params['tab'];
-      this.section = params['section'];
-
-      if (this.section !== 'enterprise-structure') {
-        const subSections = await this.formService.getSections(this.clientId, this.tab, this.section);
-        if (subSections && subSections['sections']) {
-          subSections['sections'].forEach(async (subSection: string) => {
-            const response = await this.formService.getForms(this.clientId, this.tab, this.section, subSection);
-            this.buildForms(response);
-          });
-        }
-      }
-    });
-  }
-
-  private buildForms(formData: Array<any>) {
-    formData.forEach((form) => {
-      this.subSection = form.subSection;
-
-      const formGroup = new FormGroup({});
-      this.formLabels = [];
-      form.data.forEach((f: any) => {
-        this.formLabels.push(f.label);
-        formGroup.addControl(f.id, new FormControl(f.value, f.validators ? f.validators.required?.state ? [Validators.required] : [] : []));
-      });
-
-      formGroup.updateValueAndValidity()
-      this.formGroups.push({ title: this.subSection, docId: form.id, formLabels: this.formLabels, form: formGroup });
-    })
+  ngOnInit() {
   }
 
   public onBack() {

@@ -11,21 +11,21 @@ import { ExistsInArrayValidator } from '~/validators/exists-in-array.validator';
 export class DialogChartComponent implements OnInit {
   public formGroup: FormGroup = new FormGroup({});
 
-  public roles = this.data.nodes.filter((node: EnterpriseNode) => { return node.id !== this.data.node.id }).map((n: any) => { return n.code })
+  public filteredRoles = this.data.nodes.filter((node: EnterpriseNode) => { return node.id !== this.data.node.id }).map((n: any) => { return n.code })
 
   constructor(public fb: FormBuilder, public dialogRef: MatDialogRef<DialogChartComponent>, @Inject(MAT_DIALOG_DATA) public data: any) {
     this.formGroup = this.fb.group({
       id: [this.data.node.id],
       pid: [this.data.node.pid],
       code: [this.data.node.code, [Validators.required]],
-      reportsToCode: [this.data.node.code],
+      reportsToCode: [this.data.node.reportsToCode],
       name: [this.data.node.name, [Validators.required]],
       parentStructure: [this.data.node.parentStructure],
       childStructure: [this.data.node.childStructure],
       relationship: ['partOf', [Validators.required]],
       role: [this.data.node.role, [Validators.required]],
       tags: [this.data.node.tags],
-    }, { validators: [ExistsInArrayValidator('code', this.roles)] })
+    }, { validators: [ExistsInArrayValidator('code', this.filteredRoles)] })
   }
 
   ngOnInit(): void {
@@ -35,12 +35,10 @@ export class DialogChartComponent implements OnInit {
   }
 
   private incrementCode() {
-    const tagControl = this.formGroup.get('tags');
     const roleControl = this.formGroup.get('role');
 
-
     if (this.formGroup.get('code')?.value.trim().length === 0) {
-      if (!tagControl?.value.includes('root')) {
+      if (!this.formGroup.get('tags')?.value.includes('root')) {
         const wordCount = roleControl?.value.split(' ').length;
         const totalRoleCount = this.data.nodes.filter((node: EnterpriseNode) => { return node.pid === this.formGroup.get('pid')?.value && node.role === roleControl?.value && node.id !== this.formGroup.get('id')?.value }).length + 1;
 

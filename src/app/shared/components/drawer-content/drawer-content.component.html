@@ -2,7 +2,7 @@
   <mat-list-item matRipple [routerLinkActive]="['active']" [routerLinkActiveOptions]="{ exact: false }"
     (click)="onNavigation(i, nav.children)">
     <mat-icon matListItemIcon>{{nav.icon}}</mat-icon>
-    <span matListItemTitle>{{nav.name}}</span>
+    <span class="mat-body-strong" matListItemTitle>{{nav.name}}</span>
   </mat-list-item>
   <mat-divider></mat-divider>
 </mat-nav-list>

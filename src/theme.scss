@@ -3,10 +3,26 @@
 
 @include mat.core();
 
+$mat-fonts: mat.define-typography-config($headline-1: mat.define-typography-level(112px, 112px, 300),
+        $headline-2: mat.define-typography-level(56px, 56px, 500),
+        $headline-3: mat.define-typography-level(45px, 48px, 500),
+        $headline-4: mat.define-typography-level(34px, 40px, 500),
+        $headline-5: mat.define-typography-level(24px, 32px, 500),
+        $headline-6: mat.define-typography-level(20px, 32px, 500),
+        $subtitle-1: mat.define-typography-level(20px, 32px, 500),
+        $body-1: mat.define-typography-level(14px, 20px, 400),
+        $body-2: mat.define-typography-level(14px, 24px, 400),
+        $subtitle-2: mat.define-typography-level(14px, 24px, 500),
+        $caption: mat.define-typography-level(12px, 20px, 400),
+
+    );
+
 $mat-primary: mat.define-palette(mat.$indigo-palette, 900);
 $mat-accent: mat.define-palette(mat.$pink-palette, 700);
 $mat-warn: mat.define-palette(mat.$red-palette);
 
-$app-theme: mat.define-light-theme((color: (primary: $mat-primary, accent: $mat-accent, warn: $mat-warn )));
+
+$app-theme: mat.define-light-theme((color: (primary: $mat-primary, accent: $mat-accent, warn: $mat-warn ), typography: $mat-fonts));
 
 @include mat.all-component-themes($app-theme);
+@include mat.typography-hierarchy($mat-fonts);

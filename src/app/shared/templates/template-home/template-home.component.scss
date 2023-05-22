@@ -9,11 +9,12 @@
     flex-direction: column;
     text-align: center;
     width: calc(100% - 475px);
+    padding: 4rem;
     margin: auto;
 
     .grid {
         display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
+        grid-template-columns: repeat(5, minmax(0, 1fr));
         height: inherit;
         gap: 25px;
 

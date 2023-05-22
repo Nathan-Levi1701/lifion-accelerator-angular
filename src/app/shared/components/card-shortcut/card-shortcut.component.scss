@@ -1,16 +1,24 @@
 mat-card {
     width: 100%;
     min-height: 18vh;
-    padding: 20px;
+    padding: 16px;
     text-align: left;
 
-    mat-card-title {
-        mat-icon {
-            margin-right: 10px;
-        }
+    mat-card-header {
+        padding: 0 16px 0;
 
-        h3 {
-            margin: 0;
+        mat-card-title {
+            .mat-h3 {
+                margin-bottom: 0;
+            }
+
+            mat-icon {
+                margin-right: 10px;
+            }
         }
+    }
+
+    p.mat-body-1 {
+        margin-top: 1rem;
     }
 }

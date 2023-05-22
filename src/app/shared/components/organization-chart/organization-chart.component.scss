@@ -2,7 +2,7 @@
     position: relative;
     display: block;
     width: 100%;
-    height: calc(100vh - 395px) !important;
+    height: calc(100vh - 440px) !important;
     margin-top: 1rem;
 }
 
@@ -36,6 +36,28 @@
 
 .add_icon:hover {
     cursor: pointer;
+}
+
+.zoom {
+    position: absolute;
+    z-index: 99;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    button {
+        background: white;
+        color: black;
+    }
+}
+
+.center {
+    position: absolute;
+    z-index: 99;
+    bottom: 10px;
+    right: 10px;
 }
 
 .footer {

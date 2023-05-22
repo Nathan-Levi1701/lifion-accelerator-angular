@@ -58,6 +58,7 @@ export class ClientService {
         createdAt: new Date()
       });
       response = clientRef;
+      this.feedbackService.showFeedback(`Success: New client created`, 'success')
     } catch (error) {
       this.feedbackService.showFeedback(`Error: ${error}`, 'error')
     }
@@ -70,6 +71,7 @@ export class ClientService {
 
     try {
       response = updateDoc(doc(db, 'clients', client.id as string), { name: client.name, updatedAt: new Date() })
+      this.feedbackService.showFeedback(`Success: Client updated`, 'success')
     } catch (error) {
       this.feedbackService.showFeedback(`Error: ${error}`, 'error')
     }
@@ -82,6 +84,7 @@ export class ClientService {
 
     try {
       await deleteDoc(doc(db, 'clients', clientId))
+      this.feedbackService.showFeedback(`Success: Client deleted`, 'success')
       response = true;
     } catch (error) {
       response = false;

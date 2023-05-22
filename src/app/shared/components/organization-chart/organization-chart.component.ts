@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import OrgChart from '@balkangraph/orgchart.js';
 import { EnterpriseNode } from '~/interfaces/Enterprise.interface';
 import { DialogService } from '~/services/dialog.service';
+import { FormService } from '~/services/form.service';
 
 @Component({
   selector: 'organization-chart',
@@ -9,6 +11,10 @@ import { DialogService } from '~/services/dialog.service';
   styleUrls: ['./organization-chart.component.scss']
 })
 export class OrganizationChartComponent implements OnInit {
+  public clientId: string = '';
+  public tab: string = '';
+  public section: string = '';
+
   public orgChart: OrgChart = {} as any;
   private nodeBinding = {
     field_0: "code",
@@ -43,7 +49,7 @@ export class OrganizationChartComponent implements OnInit {
     { value: "zone", text: "Zone" },
   ]
 
-  constructor(public dialogService: DialogService) {
+  constructor(public activatedRoute: ActivatedRoute, public dialogService: DialogService, public formService: FormService) {
     // Setting Default Template
     OrgChart.templates['defaultTemplate'] = Object.assign({}, OrgChart.templates['ana']);
     OrgChart.templates['defaultTemplate'].editFormHeaderColor = '#0d6efd';
@@ -168,6 +174,12 @@ export class OrganizationChartComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.activatedRoute.params.subscribe(async (params) => {
+      this.clientId = params['clientId'];
+      this.tab = params['tab'];
+      this.section = params['section'];
+    });
+
     this.orgChart = new OrgChart('#chart', {
       nodeBinding: this.nodeBinding,
       template: 'root',
@@ -240,7 +252,7 @@ export class OrganizationChartComponent implements OnInit {
       tags: ['root'],
     }
 
-    const response = await this.dialogService.openDialogChart({ title: 'Add Root Structure', nodeType: 'root', roles: [{ value: 'root', text: 'Root' }], node });
+    const response = await this.dialogService.openDialogChart({ title: 'Add Root Structure', nodeType: 'root', roles: [{ value: 'root', text: 'Root' }], node, nodes: this.nodes });
 
     if (response) {
       this.orgChart.addNode(response)
@@ -261,7 +273,7 @@ export class OrganizationChartComponent implements OnInit {
       tags: ['subRoot'],
     }
 
-    const response = await this.dialogService.openDialogChart({ title: 'Add Sub Structure', nodeType: 'root', roles: [{ value: 'subRoot', text: 'Sub Root' }], node });
+    const response = await this.dialogService.openDialogChart({ title: 'Add Sub Structure', nodeType: 'subRoot', roles: [{ value: 'subRoot', text: 'Root' }], node, nodes: this.nodes });
 
     if (response) {
       this.orgChart.addNode(response)
@@ -282,7 +294,7 @@ export class OrganizationChartComponent implements OnInit {
       tags: ['area']
     }
 
-    const response = await this.dialogService.openDialogChart({ title: 'Add Role', nodeType: null, roles: this.roles, node });
+    const response = await this.dialogService.openDialogChart({ title: 'Add Role', nodeType: null, roles: this.roles, node, nodes: this.nodes });
 
     if (response) {
       this.orgChart.addNode(response)
@@ -310,6 +322,14 @@ export class OrganizationChartComponent implements OnInit {
 
     if (response) {
       this.orgChart.removeNode(nodeId);
+    }
+  }
+
+  public async onSubmit() {
+    const response = await this.formService.getForms(this.clientId, this.tab, this.section, 'organization-chart');
+
+    if (response) {
+      await this.formService.updateForm(this.clientId, this.tab, this.section, response[0].subSection, response[0].id, this.nodes)
     }
   }
 }

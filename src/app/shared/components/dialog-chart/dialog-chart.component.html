@@ -5,6 +5,7 @@
             <mat-label>Code</mat-label>
             <input matInput formControlName="code">
             <mat-error *ngIf="formGroup.get('code')?.hasError('required')">This field is required</mat-error>
+            <mat-error *ngIf="formGroup.get('code')?.hasError('exists')">This code is already in use</mat-error>
         </mat-form-field>
         <mat-form-field appearance="fill">
             <mat-label>Name</mat-label>

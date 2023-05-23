@@ -6,6 +6,7 @@ import { ClientService } from '~/services/client.service';
 import { FormService } from '~/services/form.service';
 import { QuestionService } from '~/services/question.service';
 import { db } from '../../../firebase/config';
+import OrgChart from '@balkangraph/orgchart.js';
 @Component({
   selector: 'form-client',
   templateUrl: './form-client.component.html',
@@ -57,7 +58,38 @@ export class FormClientComponent implements OnInit, OnDestroy {
         for await (const section of questions) {
           await setDoc(doc(db, `clients/${response.id}/hr-structure/${sections['sections'][index]}`), { sections: section.map((p: any) => { return p.id }) });
           for await (const subSection of section) {
-            await addDoc(collection(db, `clients/${response.id}/hr-structure/${sections['sections'][index]}/${subSection.id}`), { data: subSection.data });
+            if (subSection.id === 'organization-chart') {
+              const rootId = OrgChart.randomId()
+              await addDoc(collection(db, `clients/${response.id}/hr-structure/${sections['sections'][index]}/${subSection.id}`), {
+                data: [
+                  {
+                    id: rootId,
+                    name: formGroup.get('name')?.value,
+                    code: 'EU-0',
+                    reportsToCode: '',
+                    role: 'Root',
+                    parentStructure: 'Enterprise Structure',
+                    childStructure: 'Enterprise Substructure 13',
+                    relationship: 'partOf',
+                    tags: ['root'],
+                  },
+                  {
+                    id: OrgChart.randomId(),
+                    pid: rootId,
+                    name: `${formGroup.get('name')?.value} Sub Structure`,
+                    code: 'EU-13',
+                    reportsToCode: 'EU-0',
+                    role: 'Root',
+                    parentStructure: 'Enterprise Structure 13',
+                    childStructure: 'Enterprise Substructure 13',
+                    relationship: 'partOf',
+                    tags: ['subRoot'],
+                  }
+                ]
+              });
+            } else {
+              await addDoc(collection(db, `clients/${response.id}/hr-structure/${sections['sections'][index]}/${subSection.id}`), { data: subSection.data });
+            }
           }
           ++index;
         }

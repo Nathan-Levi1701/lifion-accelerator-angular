@@ -12,13 +12,12 @@ import { ToolbarService } from '~/services/toolbar.service';
 })
 export class ContentSectionComponent implements OnInit {
   public formGroups: Array<{ title: string, docId: string, formLabels: Array<string>, form: FormGroup }> = [];
+  public chartGroups: Array<{ title: string, docId: string, chartData: Array<any> }> = [];
   public formLabels: Array<string> = [];
   public tab: string = '';
   public section: string = '';
   public subSection: string = '';
   public clientId: string = '';
-  public documentId: string = '';
-
 
   constructor(public activatedRoute: ActivatedRoute, public toolbarService: ToolbarService, public formService: FormService, public fb: FormBuilder, public clientService: ClientService) {
     this.activatedRoute.params.subscribe((params) => {
@@ -29,6 +28,7 @@ export class ContentSectionComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.activatedRoute.params.subscribe(async (params) => {
       this.formGroups = [];
+      this.chartGroups = [];
       this.formLabels = [];
       this.clientId = params['clientId'];
       this.tab = params['tab'];
@@ -40,8 +40,7 @@ export class ContentSectionComponent implements OnInit {
           const response = await this.formService.getForms(this.clientId, this.tab, this.section, subSection);
 
           if (this.section === 'enterprise-structure') {
-            this.documentId = response[0].id;
-            this.formGroups = response[0].data
+            this.chartGroups.push({ title: response[0].subSection, docId: response[0].id, chartData: response[0].data });
           } else {
             this.buildForms(response);
           }

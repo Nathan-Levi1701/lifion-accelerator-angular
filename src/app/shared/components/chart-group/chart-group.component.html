@@ -1,0 +1,22 @@
+<mat-tab-group *ngIf="chartGroups && chartGroups.length > 0" animationDuration="0ms" dynamicHeight
+    [(selectedIndex)]="selectedIndex" mat-stretch-tabs="false">
+    <mat-tab *ngFor="let chartGroup of chartGroups; index as i"
+        [label]="(chartGroup.title.replace('-', ' ')) | titlecase">
+        <ng-template mat-tab-label>
+            <span>{{(chartGroup.title.replace('-', ' ')) | titlecase}}</span>
+            <!-- <button mat-icon-button><mat-icon>close</mat-icon></button> -->
+        </ng-template>
+        <h3 class="mat-h3">{{(chartGroup.title.replace('-', ' ')) | titlecase}}</h3>
+
+        <organization-chart #chartInstances [nodes]="chartGroup.chartData" [tab]="tab" [section]="section"
+            [subSection]="chartGroup.subSection" [clientId]="clientId"
+            [documentId]="chartGroup.docId"></organization-chart>
+    </mat-tab>
+    <mat-tab color="primary" style="pointer-events: auto">
+        <ng-template mat-tab-label>
+            <button class="add_tab" mat-button color="primary" (click)="addTab($event)">
+                <mat-icon>add</mat-icon>
+            </button>
+        </ng-template>
+    </mat-tab>
+</mat-tab-group>

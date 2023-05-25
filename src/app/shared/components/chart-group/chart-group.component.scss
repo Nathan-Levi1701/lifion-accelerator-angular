@@ -1,0 +1,57 @@
+:host {
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+
+.mat-h3 {
+    margin-top: 1rem;
+}
+
+::ng-deep mat-tab-group {
+    mat-tab-header {
+        display: flex;
+        align-items: center;
+
+        .mat-mdc-tab.mdc-tab:last-child {
+            padding-left: 0;
+            padding-right: 0;
+            min-width: 45px;
+            max-width: 45px;
+            margin-left: 10px;
+            height: 40px;
+            align-self: center;
+
+            .mdc-tab-indicator__content .mdc-tab-indicator__content--underline {
+                border: 0;
+            }
+
+            button {
+                width: 45px;
+                max-width: 45px;
+                height: 40px;
+                border-radius: 0;
+                min-width: unset !important;
+                padding: 0;
+                // border-left: 2px solid #26318B;
+            }
+
+            mat-icon {
+                margin: 0;
+                font-size: 28px;
+                height: 28px;
+                width: 45px;
+            }
+        }
+    }
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+
+    .right {
+        display: inherit;
+        gap: 1rem;
+    }
+}

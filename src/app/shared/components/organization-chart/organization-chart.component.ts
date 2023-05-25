@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { AfterContentChecked, AfterViewChecked, AfterViewInit, Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import OrgChart from '@balkangraph/orgchart.js';
 import { EnterpriseNode } from '~/interfaces/Enterprise.interface';
@@ -11,7 +11,7 @@ import { FormService } from '~/services/form.service';
   templateUrl: './organization-chart.component.html',
   styleUrls: ['./organization-chart.component.scss']
 })
-export class OrganizationChartComponent implements OnInit, OnChanges {
+export class OrganizationChartComponent implements OnInit, AfterViewInit {
   @Input() tab: string = '';
   @Input() section: string = '';
   @Input() subSection: string = '';
@@ -19,7 +19,8 @@ export class OrganizationChartComponent implements OnInit, OnChanges {
   @Input() documentId: string = '';
   @Input() nodes: Array<EnterpriseNode> = [];
 
-  public orgChart: OrgChart = {} as any;
+  @ViewChild('chart', { static: false }) orgChart: OrgChart = {} as any;
+
   private nodeBinding = {
     field_0: "code",
     field_1: "name",
@@ -176,14 +177,66 @@ export class OrganizationChartComponent implements OnInit, OnChanges {
     OrgChart.templates['zone'].node = '<rect x="0" y="0" height="100" width="200" fill="#CE93D8" stroke-width="1" stroke="#aeaeae" rx="7" ry="7"></rect>';
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['nodes'] && changes['nodes'].currentValue.length > 0) {
-      this.nodes = changes['nodes'].currentValue;
-      this.orgChart.load(this.nodes);
-    }
+  ngAfterViewInit(): void {
+    console.log(this.orgChart)
+    if (this.orgChart) {
+      this.orgChart = new OrgChart((this.orgChart as any).nativeElement, {
+        nodeBinding: this.nodeBinding,
+        template: 'root',
+        enableDragDrop: true,
+        nodes: this.nodes,
+        enableSearch: false,
+        nodeMenu: {
+          add: { text: "Add Node", onClick: (nodeId: string) => { this.addNode(nodeId) } },
+          edit: { text: "Edit Node", onClick: (nodeId: string) => { this.editNode(nodeId) } },
+          remove: { text: "Delete Node", onClick: (nodeId: string) => { this.deleteNode(nodeId) } },
+        },
+        tags: {
+          area: { template: 'area' },
+          branch: { template: 'branch' },
+          brand: { template: 'brand' },
+          businessUnit: { template: 'businessUnit', },
+          client: { template: 'client' },
+          department: { template: 'department' },
+          departmentGroup: { template: 'departmentGroup' },
+          district: { template: 'district' },
+          division: { template: 'division' },
+          group: { template: 'group' },
+          homeDepartment: { template: 'homeDepartment' },
+          lineOfBusiness: { template: 'lineOfBusiness' },
+          market: { template: 'market' },
+          practice: { template: 'practice' },
+          program: { template: 'program' },
+          region: { template: 'region' },
+          root: {
+            template: 'root',
+            nodeMenu: {
+              add: { text: 'Add Sub Structure', onClick: (nodeId: string) => { this.addSubRootNode(nodeId) } },
+              edit: { text: "Edit Node", onClick: (nodeId: string) => { this.editNode(nodeId) } },
+              remove: { text: "Delete Node", onClick: (nodeId: string) => { this.deleteNode(nodeId) } },
+            }
+          },
+          sector: { template: 'sector' },
+          segment: { template: 'segment' },
+          subDept: { template: 'subDept' },
+          subGroup: { template: 'subGroup' },
+          subRoot: {
+            template: 'subRoot',
+            nodeMenu: {
+              add: { text: "Add Node", onClick: (nodeId: string) => { this.addNode(nodeId) } },
+              edit: { text: "Edit Node", onClick: (nodeId: string) => { this.editNode(nodeId) } },
+              remove: { text: "Delete Node", onClick: (nodeId: string) => { this.deleteNode(nodeId) } },
+            }
+          },
+          tier: { template: 'tier' },
+          workUnit: { template: 'workUnit' },
+          zone: { template: 'zone' },
+        },
+      })
 
-    if (changes['documentId']) {
-      this.documentId = changes['documentId'].currentValue;
+      this.orgChart.on('click', (_sender: OrgChart) => {
+        return false;
+      })
     }
   }
 
@@ -194,63 +247,7 @@ export class OrganizationChartComponent implements OnInit, OnChanges {
       this.section = params['section'];
     });
 
-    this.orgChart = new OrgChart('#chart', {
-      nodeBinding: this.nodeBinding,
-      template: 'root',
-      enableDragDrop: true,
-      nodes: this.nodes,
-      enableSearch: false,
-      nodeMenu: {
-        add: { text: "Add Node", onClick: (nodeId: string) => { this.addNode(nodeId) } },
-        edit: { text: "Edit Node", onClick: (nodeId: string) => { this.editNode(nodeId) } },
-        remove: { text: "Delete Node", onClick: (nodeId: string) => { this.deleteNode(nodeId) } },
-      },
-      tags: {
-        area: { template: 'area' },
-        branch: { template: 'branch' },
-        brand: { template: 'brand' },
-        businessUnit: { template: 'businessUnit', },
-        client: { template: 'client' },
-        department: { template: 'department' },
-        departmentGroup: { template: 'departmentGroup' },
-        district: { template: 'district' },
-        division: { template: 'division' },
-        group: { template: 'group' },
-        homeDepartment: { template: 'homeDepartment' },
-        lineOfBusiness: { template: 'lineOfBusiness' },
-        market: { template: 'market' },
-        practice: { template: 'practice' },
-        program: { template: 'program' },
-        region: { template: 'region' },
-        root: {
-          template: 'root',
-          nodeMenu: {
-            add: { text: 'Add Sub Structure', onClick: (nodeId: string) => { this.addSubRootNode(nodeId) } },
-            edit: { text: "Edit Node", onClick: (nodeId: string) => { this.editNode(nodeId) } },
-            remove: { text: "Delete Node", onClick: (nodeId: string) => { this.deleteNode(nodeId) } },
-          }
-        },
-        sector: { template: 'sector' },
-        segment: { template: 'segment' },
-        subDept: { template: 'subDept' },
-        subGroup: { template: 'subGroup' },
-        subRoot: {
-          template: 'subRoot',
-          nodeMenu: {
-            add: { text: "Add Node", onClick: (nodeId: string) => { this.addNode(nodeId) } },
-            edit: { text: "Edit Node", onClick: (nodeId: string) => { this.editNode(nodeId) } },
-            remove: { text: "Delete Node", onClick: (nodeId: string) => { this.deleteNode(nodeId) } },
-          }
-        },
-        tier: { template: 'tier' },
-        workUnit: { template: 'workUnit' },
-        zone: { template: 'zone' },
-      },
-    })
-
-    this.orgChart.on('click', (_sender: OrgChart) => {
-      return false;
-    })
+    console.log(this.orgChart)
   }
 
   public async addRootNode() {

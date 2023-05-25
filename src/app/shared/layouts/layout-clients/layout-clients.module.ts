@@ -6,6 +6,7 @@ import { TableClientModule } from '~/components/table-client/table-client.module
 import { FormClientModule } from '~/components/form-client/form-client.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../../../modules/material.module';
+import { OverlayLoaderModule } from '~/components/overlay-loader/overlay-loader.module';
 
 @NgModule({
   declarations: [LayoutClientsComponent],
@@ -15,7 +16,8 @@ import { MaterialModule } from '../../../modules/material.module';
     ReactiveFormsModule,
     MaterialModule,
     FormClientModule,
-    TableClientModule
+    TableClientModule,
+    OverlayLoaderModule
   ],
   exports: [LayoutClientsComponent]
 })

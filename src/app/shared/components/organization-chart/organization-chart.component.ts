@@ -177,12 +177,12 @@ export class OrganizationChartComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['nodes'].currentValue && changes['nodes'].currentValue.length > 0) {
+    if (changes['nodes'] && changes['nodes'].currentValue.length > 0) {
       this.nodes = changes['nodes'].currentValue;
       this.orgChart.load(this.nodes);
     }
 
-    if (changes['documentId'].currentValue) {
+    if (changes['documentId']) {
       this.documentId = changes['documentId'].currentValue;
     }
   }
@@ -359,6 +359,7 @@ export class OrganizationChartComponent implements OnInit, OnChanges {
   }
 
   public async onSubmit() {
-    await this.formService.updateForm(this.clientId, this.tab, this.section, 'organization-chart', this.documentId, this.nodes)
+    await this.formService.updateForm(this.clientId, this.tab, this.section, 'organization-chart', this.documentId, this.nodes);
+    this.formService.formSubject.next({ type: 'chart', tab: this.tab, section: this.section, subSection: 'organization-chart', docId: this.documentId, data: this.nodes });
   }
 }

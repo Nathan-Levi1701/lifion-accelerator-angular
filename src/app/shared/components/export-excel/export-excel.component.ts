@@ -20,7 +20,18 @@ export class ExportExcelComponent implements OnInit {
   }
 
   public export() {
-    console.log(this.exportObject);
-    this.exportService.exportFormData(this.exportObject);
+    switch (this.exportObject.type) {
+      case 'form': {
+        this.exportService.exportFormData(this.exportObject);
+        break;
+      }
+      case 'chart': {
+        this.exportService.exportChartData(this.exportObject);
+        break;
+      }
+      default: {
+        break;
+      }
+    }
   }
 }

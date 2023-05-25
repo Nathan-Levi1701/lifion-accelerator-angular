@@ -25,7 +25,7 @@ import { NavBarMainModule } from '~/components/navbar-main/navbar-main.module';
     MaterialModule,
     BrowserAnimationsModule,
     NavBarMainModule,
-    NavBarSectionModule
+    NavBarSectionModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

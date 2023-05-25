@@ -1,7 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 import Client from '~/interfaces/Client.interface';
+import { LayoutClientsComponent } from '~/layouts/layout-clients/layout-clients.component';
 import { ClientService } from '~/services/client.service';
 
 @Component({
@@ -11,7 +13,7 @@ import { ClientService } from '~/services/client.service';
 })
 
 export class TableClientComponent implements OnInit, OnDestroy {
-  constructor(public clientService: ClientService) { }
+  constructor(public router: Router, public clientService: ClientService) { }
 
   public dataSource: MatTableDataSource<Client> = new MatTableDataSource();
   public nameControl = new FormControl();
@@ -32,6 +34,7 @@ export class TableClientComponent implements OnInit, OnDestroy {
       this.dataSource.data.splice(index, 1);
       this.dataSource.data = this.dataSource.data;
       await this.clientService.delete(clientId);
+      this.clientService.clientSubject.next({} as Client)
     }
   }
 

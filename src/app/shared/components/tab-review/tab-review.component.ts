@@ -35,14 +35,18 @@ export class TabReviewComponent implements OnInit {
       validations.push(fg.formGroup.valid);
     });
 
-    let promises: Array<Promise<any>> = [];
+    let subSections: Array<string> = [];
+    let documentIds: Array<string> = [];
 
     if (validations.every((v) => { return v })) {
+      let formGroupsMap = new Map()
+
       this.formInputs?.forEach(async (fg) => {
-        let submission: Array<any> = [];
+        let submissions: Array<any> = [];
         fg.formLabels.forEach((l: string, i: number) => {
-          submission.push({
+          submissions.push({
             id: Object.keys(fg.formGroup.value)[i],
+            section: fg.formTitle,
             label: l,
             value: Object.values(fg.formGroup.value)[i],
             validators: {
@@ -50,13 +54,14 @@ export class TabReviewComponent implements OnInit {
             }
           })
         })
-        const subSection = fg.formTitle!;
-        const docId = fg.docId!;
 
-        promises.push(this.formService.updateForm(this.clientId, this.tab, this.section, subSection, docId, submission))
-      })
+        formGroupsMap.set(fg.formTitle, submissions);
 
-      await Promise.all(promises);
+        subSections.push(fg.formTitle!);
+        documentIds.push(fg.docId);
+      });
+
+      await this.formService.updateForms(this.clientId, this.tab, this.section, Array.from(formGroupsMap.keys()), documentIds, Array.from(formGroupsMap.values()));
     }
   }
 

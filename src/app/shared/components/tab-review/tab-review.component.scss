@@ -4,14 +4,19 @@
     width: 100%;
 }
 
+.mat-h2 {
+    margin: 1rem 0 !important;
+}
+
 .container {
     overflow: auto;
     height: 823px;
     padding-right: 2rem;
 
     .mat-h3 {
-        margin-top: 1rem;
+        margin: 1rem 0 !important;
     }
+
 }
 
 .footer {

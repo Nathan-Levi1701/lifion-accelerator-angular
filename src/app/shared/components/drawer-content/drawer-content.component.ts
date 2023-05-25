@@ -261,7 +261,7 @@ export class DrawerContentComponent implements OnInit, OnDestroy {
       })
 
     clientService.clientObservable.subscribe((client) => {
-      if (client.id) {
+      if (client && client.id) {
         this.clientId = client.id;
       }
     })

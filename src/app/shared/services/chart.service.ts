@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { db } from '../../firebase/config';
-import { addDoc, collection, doc, arrayUnion, updateDoc, query, getDoc } from 'firebase/firestore';
+import { addDoc, collection, doc, arrayUnion, arrayRemove, updateDoc, getDoc, deleteDoc } from 'firebase/firestore';
 import { FeedbackService } from './feedback.service';
 import { LoaderService } from './loader.service';
 import OrgChart from '@balkangraph/orgchart.js';
@@ -83,6 +83,25 @@ export class ChartService {
     try {
       response = await updateDoc(doc(db, `clients/${clientId}/${tab}/${section}/${subSection}/${documentId}`), { data: chart });
       this.feedbackService.showFeedback('Section updated successfully', 'success');
+    } catch (error) {
+      this.feedbackService.showFeedback(`Error: ${error}`, 'error');
+    } finally {
+      this.loaderService.close()
+    }
+
+    return response;
+  }
+
+  public async deleteChart(clientId: string, tab: string, section: string, subSection: string, documentId: string) {
+    this.loaderService.open();
+
+    let response: boolean = false;
+
+    try {
+      await updateDoc(doc(db, `clients/${clientId}/${tab}/${section}`), { sections: arrayRemove(subSection) });
+      await deleteDoc(doc(db, `clients/${clientId}/${tab}/${section}/${subSection}/${documentId}`));
+      response = true;
+      this.feedbackService.showFeedback('Chart deleted successfully', 'success');
     } catch (error) {
       this.feedbackService.showFeedback(`Error: ${error}`, 'error');
     } finally {

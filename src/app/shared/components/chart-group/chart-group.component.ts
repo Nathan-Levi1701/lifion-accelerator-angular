@@ -58,6 +58,22 @@ export class ChartGroupComponent implements OnInit, OnDestroy {
 
   }
 
+  public async onDelete() {
+    const response = await this.dialogService.openDialogConfirm({ title: 'Confirm Deletion', message: 'Are you sure you wish to delete this chart?' });
+
+    if (response) {
+      const subSection = this.chartGroups[this.selectedIndex].title;
+      const docId = this.chartInstances?.get(this.selectedIndex)?.documentId!;
+
+      const response = await this.chartService.deleteChart(this.client.id!, this.tab, this.section, subSection, docId);
+
+      if (response) {
+        this.chartGroups.splice(this.selectedIndex, 1);
+        this.selectedIndex = --this.selectedIndex;
+      }
+    }
+  }
+
   public async onSubmit() {
     const subSection = this.chartGroups[this.selectedIndex].title;
     const docId = this.chartInstances?.get(this.selectedIndex)?.documentId!;

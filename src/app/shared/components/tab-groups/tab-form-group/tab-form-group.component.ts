@@ -3,17 +3,17 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ClientService } from '~/services/client.service';
 import { FormService } from '~/services/form.service';
-import { FormInputComponent } from '../form-input/form-input.component';
+import { FormInputComponent } from '../../forms/form-input/form-input.component';
 import { ToolbarService } from '~/services/toolbar.service';
 
 @Component({
-  selector: 'form-group',
-  templateUrl: './form-group.component.html',
-  styleUrls: ['./form-group.component.scss']
+  selector: 'tab-form-group',
+  templateUrl: './tab-form-group.component.html',
+  styleUrls: ['./tab-form-group.component.scss']
 })
 
 
-export class FormGroupComponent implements OnInit, OnDestroy {
+export class TabFormGroupComponent implements OnInit, OnDestroy {
   @Input() formGroups: Array<{ title: string, docId: string, formLabels: Array<string>, form: FormGroup }> = [];
   @Input() formLabels: Array<string> = [];
   @Input() selectedIndex: number = 0;

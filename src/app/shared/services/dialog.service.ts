@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { lastValueFrom } from 'rxjs';
-import { DialogAddComponent } from '~/components/dialog-add/dialog-add.component';
-import { DialogChartComponent } from '~/components/dialog-chart/dialog-chart.component';
-import { DialogConfirmComponent } from '~/components/dialog-confirm/dialog-confirm.component';
+import { DialogAddComponent } from '~/components/dialogs/dialog-add/dialog-add.component';
+import { DialogChartComponent } from '~/components/dialogs/dialog-chart/dialog-chart.component';
+import { DialogConfirmComponent } from '~/components/dialogs/dialog-confirm/dialog-confirm.component';
 
 @Injectable({
   providedIn: 'root'

@@ -1,4 +1,4 @@
-<mat-tab-group *ngIf="chartGroups && chartGroups.length > 0" animationDuration="0ms" dynamicHeight
+<mat-tab-group class="mat-tab-group" *ngIf="chartGroups && chartGroups.length > 0" animationDuration="0ms" dynamicHeight
     [(selectedIndex)]="selectedIndex" mat-stretch-tabs="false">
     <mat-tab *ngFor="let chartGroup of chartGroups; index as i"
         [label]="(chartGroup.title.replace('-', ' ')) | titlecase">
@@ -7,7 +7,8 @@
         </ng-template>
         <div class="header">
             <h3 class="mat-h3">{{(chartGroup.title.replace('-', ' ')) | titlecase}}</h3>
-            <button mat-flat-button type="button" color="warn" (click)="onDelete()">Delete Chart</button>
+            <button mat-flat-button type="button" color="warn" (click)="onDelete()" [disabled]="i === 0">Delete
+                Chart</button>
         </div>
         <organization-chart #chartInstances [nodes]="chartGroup.chartData" [tab]="tab" [section]="section"
             [subSection]="chartGroup.subSection" [clientId]="clientId"

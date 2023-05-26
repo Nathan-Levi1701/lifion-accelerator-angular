@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ClientService } from '~/services/client.service';
@@ -10,7 +10,7 @@ import { ToolbarService } from '~/services/toolbar.service';
   templateUrl: './content-section.component.html',
   styleUrls: ['./content-section.component.scss']
 })
-export class ContentSectionComponent implements OnInit {
+export class ContentSectionComponent implements OnInit, OnDestroy {
   public formGroups: Array<{ title: string, docId: string, formLabels: Array<string>, form: FormGroup }> = [];
   public chartGroups: Array<{ title: string, docId: string, chartData: Array<any> }> = [];
   public formLabels: Array<string> = [];
@@ -20,9 +20,6 @@ export class ContentSectionComponent implements OnInit {
   public clientId: string = '';
 
   constructor(public activatedRoute: ActivatedRoute, public toolbarService: ToolbarService, public formService: FormService, public fb: FormBuilder, public clientService: ClientService) {
-    this.activatedRoute.params.subscribe((params) => {
-      this.section = params['section'];
-    })
   }
 
   async ngOnInit(): Promise<void> {
@@ -40,6 +37,7 @@ export class ContentSectionComponent implements OnInit {
           const response = await this.formService.getForms(this.clientId, this.tab, this.section, subSection);
 
           if (this.section === 'enterprise-structure') {
+            this.formGroups = [];
             this.chartGroups.push({ title: response[0].subSection, docId: response[0].id, chartData: response[0].data });
           } else {
             this.buildForms(response);
@@ -63,6 +61,10 @@ export class ContentSectionComponent implements OnInit {
       formGroup.updateValueAndValidity()
       this.formGroups.push({ title: this.subSection, docId: form.id, formLabels: this.formLabels, form: formGroup });
     })
+  }
+
+  ngOnDestroy(): void {
+
   }
 
 }

@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { OrganizationChartComponent } from '../organization-chart/organization-chart.component';
+import { OrganizationChartComponent } from '../../organization-chart/organization-chart.component';
 import { MatTabGroup } from '@angular/material/tabs';
 import { ChartService } from '~/services/chart.service';
 import { DialogService } from '~/services/dialog.service';
@@ -8,13 +8,13 @@ import { ClientService } from '~/services/client.service';
 import Client from '~/interfaces/Client.interface';
 
 @Component({
-  selector: 'chart-group',
-  templateUrl: './chart-group.component.html',
-  styleUrls: ['./chart-group.component.scss']
+  selector: 'tab-chart-group',
+  templateUrl: './tab-chart-group.component.html',
+  styleUrls: ['./tab-chart-group.component.scss']
 })
 
 
-export class ChartGroupComponent implements OnInit, OnDestroy {
+export class TabChartGroupComponent implements OnInit, OnDestroy {
   @Input() chartGroups: Array<{ title: string, docId: string, chartData: Array<any> }> = [];
   @Input() tab: string = '';
   @Input() section: string = '';

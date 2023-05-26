@@ -5,12 +5,12 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MaterialModule } from './modules/material.module';
 import { HeaderModule } from '~/components/header/header.module';
-import { NavBarSectionModule } from '~/components/navbar-section/navbar-section.module';
+import { NavBarSectionModule } from '~/components/navbars/navbar-section/navbar-section.module';
 import { TemplateHomeModule } from '~/templates/template-home/template-home.module';
 import { DrawerContentModule } from '~/components/drawer-content/drawer-content.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FooterModule } from '~/components/footer/footer.module';
-import { NavBarMainModule } from '~/components/navbar-main/navbar-main.module';
+import { NavBarMainModule } from '~/components/navbars/navbar-main/navbar-main.module';
 @NgModule({
   declarations: [
     AppComponent

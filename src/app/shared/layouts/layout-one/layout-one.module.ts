@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { LayoutOneComponent } from './layout-one.component';
 import { MaterialModule } from '../../../modules/material.module';
-import { OverlayLoaderModule } from '~/components/overlay-loader/overlay-loader.module';
+import { OverlayLoaderModule } from '~/components/loaders/overlay-loader/overlay-loader.module';
 
 @NgModule({
   declarations: [LayoutOneComponent],

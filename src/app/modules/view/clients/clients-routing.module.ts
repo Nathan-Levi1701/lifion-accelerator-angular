@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { FormClientComponent } from '~/components/form-client/form-client.component';
-import { NavBarSectionComponent } from '~/components/navbar-section/navbar-section.component';
+import { FormClientComponent } from '~/components/forms/form-client/form-client.component';
+import { NavBarSectionComponent } from '~/components/navbars/navbar-section/navbar-section.component';
 import { TableClientComponent } from '~/components/table-client/table-client.component';
 import { LayoutClientsComponent } from '~/layouts/layout-clients/layout-clients.component';
 

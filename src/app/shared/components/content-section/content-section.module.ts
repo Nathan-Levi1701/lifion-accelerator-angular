@@ -2,18 +2,18 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ContentSectionComponent } from './content-section.component';
 import { MaterialModule } from '../../../modules/material.module';
-import { FormGroupModule } from '../form-group/form-group.module';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ChartGroupModule } from '../chart-group/chart-group.module';
+import { TabChartGroupModule } from '~/components/tab-groups/tab-chart-group/tab-chart-group.module';
+import { TabFormGroupModule } from '~/components/tab-groups/tab-form-group/tab-form-group.module';
 
 @NgModule({
   declarations: [ContentSectionComponent],
   imports: [
     CommonModule,
     MaterialModule,
-    FormGroupModule,
+    TabFormGroupModule,
     ReactiveFormsModule,
-    ChartGroupModule
+    TabChartGroupModule
   ],
   exports: [ContentSectionComponent]
 })

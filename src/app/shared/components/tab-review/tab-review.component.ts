@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
-import { FormInputComponent } from '../form-input/form-input.component';
 import { FormService } from '~/services/form.service';
 import { FormGroup, Validators } from '@angular/forms';
+import { FormInputComponent } from '../forms/form-input/form-input.component';
 
 @Component({
   selector: 'tab-review',

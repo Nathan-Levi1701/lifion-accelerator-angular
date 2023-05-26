@@ -1,9 +1,9 @@
 <div class="container">
     <ng-container *ngIf="section === 'enterprise-structure'">
-        <chart-group [chartGroups]="chartGroups" [tab]="tab" [section]="section"></chart-group>
+        <tab-chart-group [chartGroups]="chartGroups" [tab]="tab" [section]="section"></tab-chart-group>
     </ng-container>
     <ng-container *ngIf="section !== 'enterprise-structure'">
-        <form-group [formGroups]="formGroups" [formLabels]="formLabels" [tab]="tab" [section]="section"
-            [subSection]="subSection" [clientId]="clientId"></form-group>
+        <tab-form-group [formGroups]="formGroups" [formLabels]="formLabels" [tab]="tab" [section]="section"
+            [subSection]="subSection" [clientId]="clientId"></tab-form-group>
     </ng-container>
 </div>

@@ -1,6 +1,6 @@
 <div class="container">
     <ng-container *ngIf="section === 'enterprise-structure'">
-        <chart-group [chartGroups]="chartGroups" [section]="section"></chart-group>
+        <chart-group [chartGroups]="chartGroups" [tab]="tab" [section]="section"></chart-group>
     </ng-container>
     <ng-container *ngIf="section !== 'enterprise-structure'">
         <form-group [formGroups]="formGroups" [formLabels]="formLabels" [tab]="tab" [section]="section"

@@ -1,4 +1,4 @@
-import { AfterContentChecked, AfterViewChecked, AfterViewInit, Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import OrgChart from '@balkangraph/orgchart.js';
 import { EnterpriseNode } from '~/interfaces/Enterprise.interface';
@@ -178,7 +178,6 @@ export class OrganizationChartComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    console.log(this.orgChart)
     if (this.orgChart) {
       this.orgChart = new OrgChart((this.orgChart as any).nativeElement, {
         nodeBinding: this.nodeBinding,
@@ -246,8 +245,6 @@ export class OrganizationChartComponent implements OnInit, AfterViewInit {
       this.tab = params['tab'];
       this.section = params['section'];
     });
-
-    console.log(this.orgChart)
   }
 
   public async addRootNode() {
@@ -310,8 +307,6 @@ export class OrganizationChartComponent implements OnInit, AfterViewInit {
     if (response) {
       this.orgChart.addNode(response)
     }
-
-    console.log(this.nodes)
   }
 
   public async editNode(nodeId: string) {
@@ -340,23 +335,5 @@ export class OrganizationChartComponent implements OnInit, AfterViewInit {
     if (response) {
       this.orgChart.removeNode(nodeId);
     }
-  }
-
-  public async onClear() {
-    const response = await this.dialogService.openDialogConfirm({ title: 'Confirm Deletion', message: 'Are you sure you wish to clear this chart?' });
-
-    if (response) {
-      this.nodes = [];
-      this.orgChart.load([]);
-    }
-  }
-
-  public async onCancel() {
-
-  }
-
-  public async onSubmit() {
-    await this.formService.updateForm(this.clientId, this.tab, this.section, 'organization-chart', this.documentId, this.nodes);
-    this.formService.formSubject.next({ type: 'chart', tab: this.tab, section: this.section, subSection: 'organization-chart', docId: this.documentId, data: this.nodes });
   }
 }

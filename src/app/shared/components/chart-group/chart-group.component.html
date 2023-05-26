@@ -4,13 +4,22 @@
         [label]="(chartGroup.title.replace('-', ' ')) | titlecase">
         <ng-template mat-tab-label>
             <span>{{(chartGroup.title.replace('-', ' ')) | titlecase}}</span>
-            <!-- <button mat-icon-button><mat-icon>close</mat-icon></button> -->
         </ng-template>
         <h3 class="mat-h3">{{(chartGroup.title.replace('-', ' ')) | titlecase}}</h3>
 
         <organization-chart #chartInstances [nodes]="chartGroup.chartData" [tab]="tab" [section]="section"
             [subSection]="chartGroup.subSection" [clientId]="clientId"
             [documentId]="chartGroup.docId"></organization-chart>
+        <div class="footer">
+            <div class="actions">
+                <button mat-flat-button type="button" color="accent">Back</button>
+                <button mat-button type="button" color="primary" (click)="onClear()">Clear</button>
+            </div>
+            <div class="actions">
+                <button mat-button type="button" color="primary">Cancel</button>
+                <button mat-flat-button type="button" color="primary" (click)="onSubmit()">Save</button>
+            </div>
+        </div>
     </mat-tab>
     <mat-tab color="primary" style="pointer-events: auto">
         <ng-template mat-tab-label>

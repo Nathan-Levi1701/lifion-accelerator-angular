@@ -1,0 +1,14 @@
+<h2 class="title" mat-dialog-title>{{data.title}}</h2>
+<mat-dialog-content>
+    <form [formGroup]="formGroup" (ngSubmit)="onSubmit(formGroup)">
+        <mat-form-field appearance="fill">
+            <mat-label>Chart Name:</mat-label>
+            <input matInput formControlName="name">
+            <mat-error *ngIf="formGroup.get('name')?.hasError('required')">This field is required</mat-error>
+        </mat-form-field>
+        <div class="footer">
+            <button mat-flat-button type="button" (click)="dialogRef.close(null)">Cancel</button>
+            <button color="primary" type="submit" mat-flat-button>Save</button>
+        </div>
+    </form>
+</mat-dialog-content>

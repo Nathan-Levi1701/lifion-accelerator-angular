@@ -1,11 +1,11 @@
-import { AfterViewInit, Component, Input, OnChanges, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { Component, Input, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ClientService } from '~/services/client.service';
-import { FormService } from '~/services/form.service';
-import { ToolbarService } from '~/services/toolbar.service';
 import { OrganizationChartComponent } from '../organization-chart/organization-chart.component';
 import { MatTabGroup } from '@angular/material/tabs';
+import { ChartService } from '~/services/chart.service';
+import { DialogService } from '~/services/dialog.service';
+import { ClientService } from '~/services/client.service';
+import Client from '~/interfaces/Client.interface';
 
 @Component({
   selector: 'chart-group',
@@ -14,43 +14,59 @@ import { MatTabGroup } from '@angular/material/tabs';
 })
 
 
-export class ChartGroupComponent implements OnDestroy {
+export class ChartGroupComponent implements OnInit, OnDestroy {
   @Input() chartGroups: Array<{ title: string, docId: string, chartData: Array<any> }> = [];
-  @Input() selectedIndex: number = 0;
   @Input() tab: string = '';
   @Input() section: string = '';
-  @Input() subSection: string = '';
-  @Input() clientId: string = '';
+  public selectedIndex: number = 0;
+  public client: Client = {} as any;
   @ViewChildren('chartInstances') chartInstances?: QueryList<OrganizationChartComponent>;
   @ViewChildren(MatTabGroup) matTabGroup?: QueryList<MatTabGroup>;
 
-  constructor(public activatedRoute: ActivatedRoute, public toolbarService: ToolbarService, public formService: FormService, public fb: FormBuilder, public clientService: ClientService) {
+  constructor(public activatedRoute: ActivatedRoute, public chartService: ChartService, public dialogService: DialogService, public clientService: ClientService) {
+    this.clientService.clientObservable.subscribe((client: Client) => {
+      this.client = client;
+    })
   }
 
-  public addTab(event: PointerEvent) {
+  public async addTab(event: PointerEvent) {
     event.stopPropagation();
-    this.chartGroups.push({ title: 'New Chart', docId: '', chartData: [] });
-    this.selectedIndex = this.chartGroups.length - 1;
-    console.log(this.chartInstances)
+
+    const response = await this.dialogService.openDialogAdd({ title: 'Add a name to the chart', client: this.client, tab: this.tab, section: this.section });
+    if (response) {
+      const createdChart = await this.chartService.getChart(this.client.id!, this.tab, this.section, response.name, response.docId);
+      this.chartGroups.push({ title: response.name, docId: response.docId, chartData: createdChart.data });
+      this.selectedIndex = this.chartGroups.length - 1;
+    }
   }
 
   ngOnInit() {
 
   }
 
+  public async onClear() {
+    const response = await this.dialogService.openDialogConfirm({ title: 'Confirm Deletion', message: 'Are you sure you wish to clear this chart?' });
 
-  public onBack() {
-    this.selectedIndex = --this.selectedIndex;
+    if (response) {
+      const currentOrgChart = this.chartInstances?.get(this.selectedIndex) as any;
+      currentOrgChart.nodes = [];
+      currentOrgChart.orgChart.load([]);
+    }
   }
 
-  async onSubmit() {
-
-
-  }
-
-  onReset() {
+  public async onCancel() {
 
   }
+
+  public async onSubmit() {
+    const subSection = this.chartGroups[this.selectedIndex].title;
+    const docId = this.chartInstances?.get(this.selectedIndex)?.documentId!;
+    const nodes = this.chartInstances?.get(this.selectedIndex)?.nodes;
+
+    await this.chartService.updateChart(this.client.id!, this.tab, this.section, subSection, docId, nodes);
+  }
+
+
 
   ngOnDestroy(): void {
 

@@ -4,6 +4,7 @@ import { OrganizationChartComponent } from './organization-chart.component';
 import { MaterialModule } from '../../../modules/material.module';
 import { DialogChartModule } from '../dialog-chart/dialog-chart.module';
 import { DialogConfirmModule } from '../dialog-confirm/dialog-confirm.module';
+import { DialogAddModule } from '../dialog-add/dialog-add.module';
 
 @NgModule({
   declarations: [OrganizationChartComponent],
@@ -11,7 +12,8 @@ import { DialogConfirmModule } from '../dialog-confirm/dialog-confirm.module';
     CommonModule,
     MaterialModule,
     DialogChartModule,
-    DialogConfirmModule
+    DialogConfirmModule,
+    DialogAddModule
   ],
   exports: [OrganizationChartComponent]
 })

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { EnterpriseNode } from '~/interfaces/Enterprise.interface';
 import { ExistsInArrayValidator } from '~/validators/exists-in-array.validator';
+import { camelCase, startCase } from 'lodash';
 @Component({
   selector: 'dialog-chart',
   templateUrl: './dialog-chart.component.html',
@@ -11,9 +12,13 @@ import { ExistsInArrayValidator } from '~/validators/exists-in-array.validator';
 export class DialogChartComponent implements OnInit {
   public formGroup: FormGroup = new FormGroup({});
 
-  public filteredRoles = this.data.nodes.filter((node: EnterpriseNode) => { return node.id !== this.data.node.id }).map((n: any) => { return n.code })
+  public filteredRoles = this.data.nodes.filter((node: EnterpriseNode) => { return node.id !== this.data.node.id }).map((n: any) => { return n.code });
 
   constructor(public fb: FormBuilder, public dialogRef: MatDialogRef<DialogChartComponent>, @Inject(MAT_DIALOG_DATA) public data: any) {
+
+  }
+
+  ngOnInit(): void {
     this.formGroup = this.fb.group({
       id: [this.data.node.id],
       pid: [this.data.node.pid],
@@ -23,12 +28,10 @@ export class DialogChartComponent implements OnInit {
       parentStructure: [this.data.node.parentStructure],
       childStructure: [this.data.node.childStructure],
       relationship: ['partOf', [Validators.required]],
-      role: [this.data.node.role, [Validators.required]],
+      role: [camelCase(this.data.node.role), [Validators.required]],
       tags: [this.data.node.tags],
-    }, { validators: [ExistsInArrayValidator('code', this.filteredRoles)] })
-  }
+    }, { validators: [ExistsInArrayValidator(this.data.node.code, 'code', this.filteredRoles)] })
 
-  ngOnInit(): void {
     this.formGroup.get('role')?.valueChanges.subscribe((value) => {
       this.formGroup.get('tags')?.setValue([value])
     })
@@ -56,7 +59,9 @@ export class DialogChartComponent implements OnInit {
   public onSubmit(formGroup: FormGroup) {
     if (formGroup.valid) {
       this.incrementCode();
-      this.dialogRef.close(formGroup.value)
+      const node = formGroup.value;
+      node['role'] = startCase(node.role);
+      this.dialogRef.close(node);
     }
   }
 }

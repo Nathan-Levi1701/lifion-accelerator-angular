@@ -1,6 +1,6 @@
 import { AbstractControl } from "@angular/forms";
 
-export function ExistsInArrayValidator(controlName: string, values: Array<string>) {
+export function ExistsInArrayValidator(originalValue: string, controlName: string, values: Array<string>) {
     return (group: AbstractControl) => {
         const control = group.get(controlName);
 
@@ -8,10 +8,18 @@ export function ExistsInArrayValidator(controlName: string, values: Array<string
             return null;
         }
 
-        if (values.includes(control.value)) {
-            control.setErrors({ exists: true })
+        if (control.value.toLocaleUpperCase() === originalValue.toLocaleUpperCase()) {
+            if (values.includes(control.value.toLocaleUpperCase())) {
+                control.setErrors({ exists: true })
+            } else {
+                control.setErrors(null);
+            }
         } else {
-            control.setErrors(null);
+            if (values.includes(control.value.toLocaleUpperCase())) {
+                control.setErrors({ exists: true })
+            } else {
+                control.setErrors(null);
+            }
         }
 
         return null;

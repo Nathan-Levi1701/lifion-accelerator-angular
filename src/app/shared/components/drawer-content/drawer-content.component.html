@@ -1,4 +1,4 @@
-<mat-nav-list *ngFor="let nav of navigation; index as i">
+<mat-nav-list *ngFor="let nav of navigationContent; index as i">
   <mat-list-item matRipple [routerLinkActive]="['active']" [routerLinkActiveOptions]="{ exact: false }"
     (click)="onNavigation(i, nav.children)">
     <mat-icon matListItemIcon>{{nav.icon}}</mat-icon>

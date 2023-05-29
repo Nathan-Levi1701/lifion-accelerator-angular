@@ -1,7 +1,6 @@
 import { Component, Input, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { OrganizationChartComponent } from '../../organization-chart/organization-chart.component';
-import { MatTabGroup } from '@angular/material/tabs';
 import { ChartService } from '~/services/chart.service';
 import { DialogService } from '~/services/dialog.service';
 import { ClientService } from '~/services/client.service';
@@ -20,13 +19,10 @@ export class TabChartGroupComponent implements OnInit, OnDestroy {
   @Input() section: string = '';
   public selectedIndex: number = 0;
   public client: Client = {} as any;
-  @ViewChildren('chartInstances') chartInstances?: QueryList<OrganizationChartComponent>;
-  @ViewChildren(MatTabGroup) matTabGroup?: QueryList<MatTabGroup>;
+  @ViewChildren('orgCharts') orgCharts?: QueryList<OrganizationChartComponent>;
 
   constructor(public activatedRoute: ActivatedRoute, public chartService: ChartService, public dialogService: DialogService, public clientService: ClientService) {
-    this.clientService.clientObservable.subscribe((client: Client) => {
-      this.client = client;
-    })
+
   }
 
   public async addTab(event: PointerEvent) {
@@ -41,14 +37,16 @@ export class TabChartGroupComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
+    this.clientService.clientObservable.subscribe((client: Client) => {
+      this.client = client;
+    })
   }
 
   public async onClear() {
     const response = await this.dialogService.openDialogConfirm({ title: 'Confirm Deletion', message: 'Are you sure you wish to clear this chart?' });
 
     if (response) {
-      const currentOrgChart = this.chartInstances?.get(this.selectedIndex) as any;
+      const currentOrgChart = this.orgCharts?.get(this.selectedIndex) as any;
       currentOrgChart.nodes = [];
       currentOrgChart.orgChart.load([]);
     }
@@ -58,12 +56,16 @@ export class TabChartGroupComponent implements OnInit, OnDestroy {
 
   }
 
+  public async onRename() {
+
+  }
+
   public async onDelete() {
     const response = await this.dialogService.openDialogConfirm({ title: 'Confirm Deletion', message: 'Are you sure you wish to delete this chart?' });
 
     if (response) {
       const subSection = this.chartGroups[this.selectedIndex].title;
-      const docId = this.chartInstances?.get(this.selectedIndex)?.documentId!;
+      const docId = this.orgCharts?.get(this.selectedIndex)?.documentId!;
 
       const response = await this.chartService.deleteChart(this.client.id!, this.tab, this.section, subSection, docId);
 
@@ -76,8 +78,8 @@ export class TabChartGroupComponent implements OnInit, OnDestroy {
 
   public async onSubmit() {
     const subSection = this.chartGroups[this.selectedIndex].title;
-    const docId = this.chartInstances?.get(this.selectedIndex)?.documentId!;
-    const nodes = this.chartInstances?.get(this.selectedIndex)?.nodes;
+    const docId = this.orgCharts?.get(this.selectedIndex)?.documentId!;
+    const nodes = this.orgCharts?.get(this.selectedIndex)?.nodes;
 
     await this.chartService.updateChart(this.client.id!, this.tab, this.section, subSection, docId, nodes);
   }

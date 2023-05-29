@@ -7,10 +7,14 @@
         </ng-template>
         <div class="header">
             <h3 class="mat-h3">{{(chartGroup.title.replace('-', ' ')) | titlecase}}</h3>
-            <button mat-flat-button type="button" color="warn" (click)="onDelete()" [disabled]="i === 0">Delete
-                Chart</button>
+            <div class="actions">
+                <!-- <button mat-flat-button type="button" color="accent" (click)="onRename()">Rename
+                    Chart</button> -->
+                <button mat-flat-button type="button" color="warn" (click)="onDelete()" [disabled]="i === 0">Delete
+                    Chart</button>
+            </div>
         </div>
-        <organization-chart #chartInstances [nodes]="chartGroup.chartData" [tab]="tab" [section]="section"
+        <organization-chart #orgCharts [nodes]="chartGroup.chartData" [tab]="tab" [section]="section"
             [subSection]="chartGroup.subSection" [clientId]="clientId"
             [documentId]="chartGroup.docId"></organization-chart>
         <div class="footer">

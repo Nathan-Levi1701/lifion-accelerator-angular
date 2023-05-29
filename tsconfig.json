@@ -15,9 +15,12 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
     "target": "ES2022",
     "module": "ESNext",
     "useDefineForClassFields": false,
+    "allowSyntheticDefaultImports": true,
     "lib": [
       "ES2022",
       "dom"
@@ -54,6 +57,9 @@
       ],
       "~/classes/*": [
         "app/shared/classes/*"
+      ],
+      "~/assets/*": [
+        "assets/*"
       ],
       "exceljs": [
         "node_modules/exceljs/dist/exceljs.min"

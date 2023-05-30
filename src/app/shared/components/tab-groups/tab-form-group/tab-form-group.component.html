@@ -2,8 +2,9 @@
     mat-stretch-tabs="false">
     <mat-tab *ngFor="let formGroup of formGroups; index as i" [label]="(formGroup.title.replace('-', ' ')) | titlecase"
         [disabled]="false">
-        <h3 class="mat-h3">{{(formGroup.title.replace('-', ' ')) | titlecase}}</h3>
         <ng-template matTabContent>
+            <h3 class="mat-h3">{{(formGroup.title.replace('-', ' ')) | titlecase}}</h3>
+            <mat-divider></mat-divider>
             <form-input [formGroup]="formGroup.form" [formLabels]="formGroup.formLabels" [formTitle]="formGroup.title"
                 [docId]="formGroup.docId">
             </form-input>

@@ -4,6 +4,7 @@ import { db } from '../../firebase/config';
 import { setDoc, doc, addDoc, collection, DocumentData, QueryDocumentSnapshot, getDocs, query, updateDoc, getDoc } from 'firebase/firestore';
 import { FeedbackService } from './feedback.service';
 import { LoaderService } from './loader.service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 @Injectable({
   providedIn: 'root'
 })
@@ -68,10 +69,8 @@ export class FormService {
     return response;
   }
 
-  public async getSections(clientId: string, tab: string, section: string) {
+  public async getSubSections(clientId: string, tab: string, section: string) {
     let response: any = {};
-
-    this.loaderService.open();
 
     try {
       const document = await getDoc(doc(db, `clients/${clientId}/${tab}/${section}`));
@@ -83,16 +82,58 @@ export class FormService {
     } catch (error) {
       this.feedbackService.showFeedback(`Error: ${error}`, 'error')
     } finally {
-      this.loaderService.close();
+
     }
 
     return response;
   }
 
+  public async getTabGroups(clientId: string, tab: string, section: string) {
+    let formGroups: Array<any> = [];
+    let chartGroups: Array<any> = [];
+    let formLabels: Array<string> = [];
+
+    this.loaderService.open();
+
+    try {
+      const subSections = await this.getSubSections(clientId, tab, section);
+
+      if (subSections && subSections['subSections']) {
+        subSections['subSections'].forEach(async (subSection: string) => {
+          const response = await this.getForms(clientId, tab, section, subSection);
+
+          if (section !== 'enterprise-structure') {
+            response.forEach((form) => {
+              const subSection = form.subSection;
+
+              const formGroup = new FormGroup({});
+              formLabels = [];
+              form.data.forEach((f: any) => {
+                formLabels.push(f.label);
+                formGroup.addControl(f.id, new FormControl(f.value, f.validators ? f.validators.required?.state ? [Validators.required] : [] : []));
+              });
+
+              formGroup.updateValueAndValidity()
+              formGroups.push({ title: subSection, docId: form.id, formLabels: formLabels, form: formGroup });
+            })
+          } else {
+            formGroups = [];
+            chartGroups.push({ title: response[0].subSection, docId: response[0].id, chartData: response[0].data });
+          }
+        })
+      }
+    } catch (error) {
+      this.feedbackService.showFeedback(`Error: ${error}`, 'error')
+    } finally {
+      this.loaderService.close()
+    }
+
+    return [formGroups, chartGroups, formLabels];
+  }
+
+
   public async getForms(clientId: string, tab: string, section: string, subSection: string) {
     let response: Array<any> = [];
-
-    // const loaderRef = this.loaderService.open();
 
     try {
       const querySnapshot = await getDocs(query(collection(db, `clients/${clientId}/${tab}/${section}/${subSection}`)))
@@ -101,8 +142,6 @@ export class FormService {
       });
     } catch (error) {
       this.feedbackService.showFeedback(`Error: ${error}`, 'error')
-    } finally {
-      // loaderRef.close()
     }
 
     return response;

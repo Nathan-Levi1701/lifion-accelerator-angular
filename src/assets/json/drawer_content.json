@@ -18,9 +18,9 @@
         "url": "/client/clientId/hr-structure/cost-center"
       },
       {
-        "name": "Locations",
+        "name": "Office Location",
         "icon": "account_tree",
-        "url": "/client/clientId/hr-structure/locations"
+        "url": "/client/clientId/hr-structure/office-location"
       },
       {
         "name": "Enterprise Structure",

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ClientService } from '~/services/client.service';
 import { FormService } from '~/services/form.service';
@@ -31,36 +31,8 @@ export class ContentSectionComponent implements OnInit, OnDestroy {
       this.tab = params['tab'];
       this.section = params['section'];
 
-      const subSections = await this.formService.getSections(this.clientId, this.tab, this.section);
-      if (subSections && subSections['sections']) {
-        subSections['sections'].forEach(async (subSection: string) => {
-          const response = await this.formService.getForms(this.clientId, this.tab, this.section, subSection);
-
-          if (this.section === 'enterprise-structure') {
-            this.formGroups = [];
-            this.chartGroups.push({ title: response[0].subSection, docId: response[0].id, chartData: response[0].data });
-          } else {
-            this.buildForms(response);
-          }
-        });
-      }
+      [this.formGroups, this.chartGroups, this.formLabels] = await this.formService.getTabGroups(this.clientId, this.tab, this.section);
     });
-  }
-
-  private buildForms(formData: Array<any>) {
-    formData.forEach((form) => {
-      this.subSection = form.subSection;
-
-      const formGroup = new FormGroup({});
-      this.formLabels = [];
-      form.data.forEach((f: any) => {
-        this.formLabels.push(f.label);
-        formGroup.addControl(f.id, new FormControl(f.value, f.validators ? f.validators.required?.state ? [Validators.required] : [] : []));
-      });
-
-      formGroup.updateValueAndValidity()
-      this.formGroups.push({ title: this.subSection, docId: form.id, formLabels: this.formLabels, form: formGroup });
-    })
   }
 
   ngOnDestroy(): void {

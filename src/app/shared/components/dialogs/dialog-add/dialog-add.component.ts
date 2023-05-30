@@ -25,7 +25,7 @@ export class DialogAddComponent implements OnInit {
   public async onSubmit(formGroup: FormGroup) {
     if (formGroup.valid) {
       const response = await this.chartService.addChart(this.data.client, this.data.tab, this.data.section, this.formGroup.value);
-      this.dialogRef.close({ docId: response.id, name: this.formGroup.get('name')?.value });
+      this.dialogRef.close({ docId: response.id, name: (this.formGroup.get('name')?.value.replaceAll(' ', '-')).toLocaleLowerCase() });
     }
   }
 } 

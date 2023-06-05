@@ -58,6 +58,9 @@
       "~/classes/*": [
         "app/shared/classes/*"
       ],
+      "~/pipes/*": [
+        "app/shared/pipes/*"
+      ],
       "~/assets/*": [
         "assets/*"
       ],

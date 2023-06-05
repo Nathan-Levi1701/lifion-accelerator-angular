@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { ExportService } from '~/services/export.service';
 import { FormService } from '~/services/form.service';
 
@@ -10,7 +11,7 @@ import { FormService } from '~/services/form.service';
 export class ExportExcelComponent implements OnInit {
   public exportObject: any = {};
 
-  constructor(public exportService: ExportService, public formService: FormService) {
+  constructor(public activatedRoute: ActivatedRoute, public exportService: ExportService, public formService: FormService) {
   }
 
   ngOnInit(): void {

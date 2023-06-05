@@ -1,8 +1,8 @@
-<nav *ngIf="title || client.id">
+<nav *ngIf="title || (client && client.id)">
     <mat-toolbar>
         <div *ngIf="client && client.id" class="client">
             <div class="avatar">
-                {{client.name.substring(0, 2) | uppercase}}
+                {{(client.name?.substring(0, 2)) | uppercase}}
             </div>
             <span style="font-weight: bold;">{{client.name}}</span>
         </div>

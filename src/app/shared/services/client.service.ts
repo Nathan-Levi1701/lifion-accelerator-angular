@@ -80,7 +80,7 @@ export class ClientService {
       let index = 0;
 
       for await (const section of questions) {
-        await setDoc(doc(db, `clients/${response.id}/hr-structure/${sections['sections'][index]}`), { sections: section.map((p: any) => { return p.id }) });
+        await setDoc(doc(db, `clients/${response.id}/hr-structure/${sections['sections'][index]}`), { subSections: section.map((p: any) => { return p.id }) });
         for await (const subSection of section) {
           if (subSection.id === 'organization-chart') {
             const rootId = OrgChart.randomId()

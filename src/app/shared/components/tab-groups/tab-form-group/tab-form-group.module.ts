@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../../../../modules/material.module';
 import { FormInputModule } from '~/components/forms/form-input/form-input.module';
 import { TabReviewModule } from '~/components/tab-review/tab-review.module';
+import { TitleCaseExtendedPipe } from '~/pipes/titlecase-extended.pipe';
 @NgModule({
   declarations: [TabFormGroupComponent],
   imports: [
@@ -12,7 +13,10 @@ import { TabReviewModule } from '~/components/tab-review/tab-review.module';
     MaterialModule,
     ReactiveFormsModule,
     FormInputModule,
-    TabReviewModule
+    TabReviewModule,
+  ],
+  providers: [
+    TitleCaseExtendedPipe
   ],
   exports: [TabFormGroupComponent]
 })

@@ -4,6 +4,7 @@ import { TabChartGroupComponent } from './tab-chart-group.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../../../../modules/material.module';
 import { OrganizationChartModule } from '../../organization-chart/organization-chart.module';
+import { TitleCaseExtendedPipe } from '~/pipes/titlecase-extended.pipe';
 
 @NgModule({
   declarations: [TabChartGroupComponent],
@@ -12,6 +13,9 @@ import { OrganizationChartModule } from '../../organization-chart/organization-c
     MaterialModule,
     ReactiveFormsModule,
     OrganizationChartModule
+  ],
+  providers: [
+    TitleCaseExtendedPipe
   ],
   exports: [TabChartGroupComponent]
 })

@@ -1,11 +1,12 @@
-import { Component, Input, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ClientService } from '~/services/client.service';
 import { FormService } from '~/services/form.service';
 import { FormInputComponent } from '../../forms/form-input/form-input.component';
 import { ToolbarService } from '~/services/toolbar.service';
-
+import { ExportService } from '~/services/export.service';
+import { TitleCaseExtendedPipe } from '~/pipes/titlecase-extended.pipe';
 @Component({
   selector: 'tab-form-group',
   templateUrl: './tab-form-group.component.html',
@@ -22,15 +23,12 @@ export class TabFormGroupComponent implements OnInit, OnDestroy {
   @Input() subSection: string = '';
   @Input() clientId: string = '';
   @ViewChildren(FormInputComponent) formInputs?: QueryList<FormInputComponent>;
+  @ViewChild(FormInputComponent, { static: false }) formInput!: FormInputComponent;
 
-  constructor(public activatedRoute: ActivatedRoute, public toolbarService: ToolbarService, public formService: FormService, public fb: FormBuilder, public clientService: ClientService) {
+  constructor(public activatedRoute: ActivatedRoute, public toolbarService: ToolbarService, public formService: FormService, public fb: FormBuilder, public clientService: ClientService, public exportService: ExportService, public titlecaseExtended: TitleCaseExtendedPipe) {
   }
 
   ngOnInit() {
-  }
-
-  public onBack() {
-    this.selectedIndex = --this.selectedIndex;
   }
 
   async onSubmit() {
@@ -56,6 +54,10 @@ export class TabFormGroupComponent implements OnInit, OnDestroy {
       this.formService.formSubject.next({ type: 'form', tab: this.tab, section: this.section, subSection: subSection, docId: docId, data: form });
       this.selectedIndex = this.selectedIndex + 1;
     }
+  }
+
+  onExport() {
+    this.exportService.exportFormData({ tab: this.tab, section: this.titlecaseExtended.transform(this.section), subSection: this.titlecaseExtended.transform(this.formInput.formTitle), data: this.formInput });
   }
 
   onReset() {

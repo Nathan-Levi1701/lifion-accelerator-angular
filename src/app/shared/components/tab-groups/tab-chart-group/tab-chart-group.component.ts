@@ -1,10 +1,12 @@
-import { Component, Input, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { OrganizationChartComponent } from '../../organization-chart/organization-chart.component';
 import { ChartService } from '~/services/chart.service';
 import { DialogService } from '~/services/dialog.service';
 import { ClientService } from '~/services/client.service';
 import Client from '~/interfaces/Client.interface';
+import { ExportService } from '~/services/export.service';
+import { TitleCaseExtendedPipe } from '~/pipes/titlecase-extended.pipe';
 
 @Component({
   selector: 'tab-chart-group',
@@ -20,8 +22,9 @@ export class TabChartGroupComponent implements OnInit, OnDestroy {
   public selectedIndex: number = 0;
   public client: Client = {} as any;
   @ViewChildren('orgCharts') orgCharts?: QueryList<OrganizationChartComponent>;
+  @ViewChild(OrganizationChartComponent, { static: false }) orgChart!: OrganizationChartComponent;
 
-  constructor(public activatedRoute: ActivatedRoute, public chartService: ChartService, public dialogService: DialogService, public clientService: ClientService) {
+  constructor(public activatedRoute: ActivatedRoute, public chartService: ChartService, public dialogService: DialogService, public clientService: ClientService, public exportService: ExportService, public titlecaseExtended: TitleCaseExtendedPipe) {
 
   }
 
@@ -58,6 +61,11 @@ export class TabChartGroupComponent implements OnInit, OnDestroy {
 
   public async onRename() {
 
+  }
+
+  public async onExport() {
+    const subSection = this.chartGroups[this.selectedIndex].title;
+    this.exportService.exportChartData({ nodes: this.orgChart.nodes, tab: this.titlecaseExtended.transform(this.tab), section: this.titlecaseExtended.transform(this.section), subSection: this.titlecaseExtended.transform(subSection) });
   }
 
   public async onDelete() {

@@ -3,25 +3,28 @@
     <mat-tab *ngFor="let formGroup of formGroups; index as i" [label]="(formGroup.title.replace('-', ' ')) | titlecase"
         [disabled]="false">
         <ng-template matTabContent>
-            <h3 class="mat-h3">{{(formGroup.title.replace('-', ' ')) | titlecase}}</h3>
+            <div class="header">
+                <h3 class="mat-h3">{{(formGroup.title.replace('-', ' ')) | titlecase}}</h3>
+                <button mat-flat-button color="accent" (click)="onExport()">Export</button>
+            </div>
             <mat-divider></mat-divider>
             <form-input [formGroup]="formGroup.form" [formLabels]="formGroup.formLabels" [formTitle]="formGroup.title"
                 [docId]="formGroup.docId">
             </form-input>
-        </ng-template>
-        <div class="footer">
-            <button mat-flat-button type="button" color="accent" [disabled]="selectedIndex === 0"
-                (click)="onBack()">Back</button>
-            <div class="right">
+            <div class="footer">
+                <!-- <button mat-flat-button type="button" color="accent" [disabled]="selectedIndex === 0"
+                    (click)="onBack()">Back</button> -->
+
                 <button mat-button type="button" color="primary" (click)="onReset()">Cancel</button>
                 <button mat-flat-button type="button" color="primary" (click)="onSubmit()">Save</button>
             </div>
-        </div>
+        </ng-template>
+
     </mat-tab>
-    <mat-tab label="Review">
+    <!-- <mat-tab label="Review">
         <ng-template matTabContent>
             <tab-review [clientId]="clientId" [tab]="tab" [section]="section" [formGroups]="formGroups"
                 (onPreviousTab)="onBack()"></tab-review>
         </ng-template>
-    </mat-tab>
+    </mat-tab> -->
 </mat-tab-group>

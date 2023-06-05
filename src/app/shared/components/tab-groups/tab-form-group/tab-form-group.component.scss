@@ -6,11 +6,17 @@
 
 .mat-h3 {
     margin-top: 1rem;
+    margin-bottom: 0;
 }
 
 form {
     display: flex;
     flex-direction: column;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
 }
 
 .footer {

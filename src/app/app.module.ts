@@ -11,6 +11,7 @@ import { DrawerContentModule } from '~/components/drawer-content/drawer-content.
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FooterModule } from '~/components/footer/footer.module';
 import { NavBarMainModule } from '~/components/navbars/navbar-main/navbar-main.module';
+
 @NgModule({
   declarations: [
     AppComponent

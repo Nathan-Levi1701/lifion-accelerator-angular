@@ -35,21 +35,30 @@ export class ExportService {
   }
 
   public exportChartData(data: any) {
-    const workbook = new ExcelJS.Workbook();
-    const sheet = workbook.addWorksheet();
+    let workbook = new ExcelJS.Workbook();
+    let sheet = workbook.addWorksheet();
 
     sheet.addRow(['Code', 'Reports To Code', 'Parent Structure', 'Child Structure', 'Relationship', 'Role']);
-    data.data.forEach((node: EnterpriseNode) => {
-      sheet.addRow([node.code, node.reportsToCode, node.reportsToCode, node.childStructure, node.relationship, node.role]);
+    data.nodes.forEach((node: EnterpriseNode) => {
+      sheet.addRow([node.code, node.reportsToCode, node.parentStructure, node.childStructure, node.relationship, node.role]);
     })
 
-    this.saveWorkbook(workbook, data);
+    workbook.xlsx.writeBuffer().then(excelData => {
+      const blob = new Blob([excelData], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+      FileSaver.saveAs(blob, `${data.tab} ${data.section} ${data.subSection} - Enterprise Unit Relationship.xlsx`);
+    })
+
+    workbook = new ExcelJS.Workbook();
+    sheet = workbook.addWorksheet();
 
     sheet.addRow(['Code', 'Name', 'Structure', 'Role']);
-    data.data.forEach((node: EnterpriseNode) => {
+    data.nodes.forEach((node: EnterpriseNode) => {
       sheet.addRow([node.code, node.name, node.childStructure, node.role]);
     })
 
-    this.saveWorkbook(workbook, data);
+    workbook.xlsx.writeBuffer().then(excelData => {
+      const blob = new Blob([excelData], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+      FileSaver.saveAs(blob, `${data.tab} ${data.section} ${data.subSection} - Enterprise Units.xlsx`);
+    })
   }
 }

@@ -1,12 +1,12 @@
 <h2 class="title" mat-dialog-title>{{data.title}}</h2>
 <mat-dialog-content>
     <form [formGroup]="formGroup" (ngSubmit)="onSubmit(formGroup)">
-        <mat-form-field appearance="fill">
+        <!-- <mat-form-field appearance="fill">
             <mat-label>Code</mat-label>
             <input matInput formControlName="code">
             <mat-error *ngIf="formGroup.get('code')?.hasError('required')">This field is required</mat-error>
             <mat-error *ngIf="formGroup.get('code')?.hasError('exists')">This code is already in use</mat-error>
-        </mat-form-field>
+        </mat-form-field> -->
         <mat-form-field appearance="fill">
             <mat-label>Name</mat-label>
             <input matInput formControlName="name">
@@ -14,7 +14,7 @@
         </mat-form-field>
         <mat-form-field appearance="fill">
             <mat-label>Structure</mat-label>
-            <input matInput formControlName="parentStructure">
+            <input matInput formControlName="parentStructure" [readonly]="true">
             <mat-error *ngIf="formGroup.get('parentStructure')?.hasError('required')">This field is
                 required</mat-error>
         </mat-form-field>

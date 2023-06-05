@@ -6,7 +6,6 @@ import { FormGroup } from '@angular/forms';
   styleUrls: ['./form-input.component.scss']
 })
 
-
 export class FormInputComponent implements OnInit, OnDestroy {
   @Input() formGroup: FormGroup = new FormGroup({});
   @Input() formLabels: Array<string> = [];
@@ -16,9 +15,7 @@ export class FormInputComponent implements OnInit, OnDestroy {
   constructor() {
   }
 
-
   ngOnInit(): void {
-
   }
 
   ngOnDestroy(): void {

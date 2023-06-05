@@ -69,7 +69,7 @@ export class ChartService {
         response = docSnapshot.data()
       }
     } catch (error) {
-
+      this.feedbackService.showFeedback(`Error: ${error}`, 'error');
     }
 
     return response;

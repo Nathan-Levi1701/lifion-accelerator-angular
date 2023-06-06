@@ -23,11 +23,11 @@ export class ExportExcelComponent implements OnInit {
   public export() {
     switch (this.exportObject.type) {
       case 'form': {
-        this.exportService.exportFormData(this.exportObject);
+        this.exportService.exportAllFormData(this.exportObject);
         break;
       }
       case 'chart': {
-        this.exportService.exportChartData(this.exportObject);
+        this.exportService.exportAllChartData(this.exportObject);
         break;
       }
       default: {

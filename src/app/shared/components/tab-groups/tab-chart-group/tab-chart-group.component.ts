@@ -101,8 +101,12 @@ export class TabChartGroupComponent implements OnInit, OnDestroy {
 
   public async onSubmit() {
     const subSection = this.chartGroups[this.selectedIndex].title;
-    const docId = this.orgCharts?.get(this.selectedIndex)?.documentId!;
-    const nodes = this.orgCharts?.get(this.selectedIndex)?.nodes;
+    const docId = this.chartGroups[this.selectedIndex].docId;
+    const nodes = this.chartGroups[this.selectedIndex].chartData;
+
+
+    console.log(subSection)
+    console.log(docId)
 
     await this.chartService.updateChart(this.client.id!, this.tab, this.section, subSection, docId, nodes);
   }

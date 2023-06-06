@@ -2,23 +2,19 @@
     mat-stretch-tabs="false">
     <mat-tab *ngFor="let formGroup of formGroups; index as i" [label]="(formGroup.title.replace('-', ' ')) | titlecase"
         [disabled]="false">
-        <ng-template matTabContent>
-            <div class="header">
-                <h3 class="mat-h3">{{(formGroup.title.replace('-', ' ')) | titlecase}}</h3>
-                <button mat-flat-button color="accent" (click)="onExport()">Export</button>
-            </div>
-            <mat-divider></mat-divider>
-            <form-input [formGroup]="formGroup.form" [formLabels]="formGroup.formLabels" [formTitle]="formGroup.title"
-                [docId]="formGroup.docId">
-            </form-input>
-            <div class="footer">
-                <!-- <button mat-flat-button type="button" color="accent" [disabled]="selectedIndex === 0"
-                    (click)="onBack()">Back</button> -->
 
-                <button mat-button type="button" color="primary" (click)="onReset()">Cancel</button>
-                <button mat-flat-button type="button" color="primary" (click)="onSubmit()">Save</button>
-            </div>
-        </ng-template>
+        <div class="header">
+            <h3 class="mat-h3">{{(formGroup.title.replace('-', ' ')) | titlecase}}</h3>
+            <button mat-flat-button color="accent" (click)="onExport()">Export</button>
+        </div>
+        <mat-divider></mat-divider>
+        <form-input [formGroup]="formGroup.form" [formLabels]="formGroup.formLabels" [formTitle]="formGroup.title"
+            [docId]="formGroup.docId">
+        </form-input>
+        <div class="footer">
+            <button mat-button type="button" color="primary" (click)="onReset()">Cancel</button>
+            <button mat-flat-button type="button" color="primary" (click)="onSubmit()">Save</button>
+        </div>
 
     </mat-tab>
     <!-- <mat-tab label="Review">

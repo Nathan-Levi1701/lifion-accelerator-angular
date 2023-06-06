@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, QueryList, AfterViewInit, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ClientService } from '~/services/client.service';
@@ -29,6 +29,7 @@ export class TabFormGroupComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+
   }
 
   async onSubmit() {
@@ -51,7 +52,7 @@ export class TabFormGroupComponent implements OnInit, OnDestroy {
       const docId = this.formInputs?.get(this.selectedIndex)?.docId!;
 
       await this.formService.updateForm(this.clientId, this.tab, this.section, subSection, docId, submission);
-      this.formService.formSubject.next({ type: 'form', tab: this.tab, section: this.section, subSection: subSection, docId: docId, data: form });
+      // this.formService.formSubject.next({ type: 'form', tab: this.tab, section: this.section, subSection: subSection, docId: docId, data: form });
       this.selectedIndex = this.selectedIndex + 1;
     }
   }

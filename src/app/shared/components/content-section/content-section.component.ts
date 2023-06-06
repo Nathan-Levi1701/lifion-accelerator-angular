@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { TitleCaseExtendedPipe } from '~/pipes/titlecase-extended.pipe';
 import { ClientService } from '~/services/client.service';
 import { FormService } from '~/services/form.service';
 import { ToolbarService } from '~/services/toolbar.service';
@@ -19,7 +20,7 @@ export class ContentSectionComponent implements OnInit, OnDestroy {
   public subSection: string = '';
   public clientId: string = '';
 
-  constructor(public activatedRoute: ActivatedRoute, public toolbarService: ToolbarService, public formService: FormService, public fb: FormBuilder, public clientService: ClientService) {
+  constructor(public activatedRoute: ActivatedRoute, public toolbarService: ToolbarService, public formService: FormService, public fb: FormBuilder, public clientService: ClientService, public titlecaseExtended: TitleCaseExtendedPipe) {
   }
 
   async ngOnInit(): Promise<void> {
@@ -32,6 +33,24 @@ export class ContentSectionComponent implements OnInit, OnDestroy {
       this.section = params['section'];
 
       [this.formGroups, this.chartGroups, this.formLabels] = await this.formService.getTabGroups(this.clientId, this.tab, this.section);
+
+      setTimeout(() => {
+        if (this.formGroups.length > 0) {
+          const subSections = this.formGroups.map((fg) => { return this.titlecaseExtended.transform(fg.title) });
+          const forms = this.formGroups.map((fg) => { return fg.form });
+          const labels = this.formGroups.map((fg) => { return fg.formLabels });
+
+          this.formService.formSubject.next({ type: 'form', tab: this.tab, section: this.titlecaseExtended.transform(this.section), subSections: subSections, formLabels: labels, data: forms });
+        }
+
+        if (this.chartGroups.length > 0) {
+          const subSections = this.chartGroups.map((cg) => { return this.titlecaseExtended.transform(cg.title) });
+          const charts = this.chartGroups.map((cg) => { return cg.chartData });
+
+          this.formService.formSubject.next({ type: 'chart', tab: this.tab, section: this.titlecaseExtended.transform(this.section), subSections: subSections, data: charts });
+        }
+
+      }, 1000);
     });
   }
 

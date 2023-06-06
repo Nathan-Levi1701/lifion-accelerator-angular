@@ -19,11 +19,11 @@ export class ChartService {
     this.loaderService.open();
 
     try {
-      await updateDoc(doc(db, `clients/${client.id}/${tab}/${section}`), { sections: arrayUnion(data.name.replaceAll(' ', '-').toLowerCase()) });
+      await updateDoc(doc(db, `clients/${client.id}/${tab}/${section}`), { subSections: arrayUnion(data.replaceAll(' ', '-').toLowerCase()) });
 
       const rootId = OrgChart.randomId();
 
-      response = await addDoc(collection(db, `clients/${client.id}/${tab}/${section}/${data.name.replaceAll(' ', '-').toLowerCase()}`), {
+      response = await addDoc(collection(db, `clients/${client.id}/${tab}/${section}/${data.replaceAll(' ', '-').toLowerCase()}`), {
         data: [
           {
             id: rootId,
@@ -50,7 +50,7 @@ export class ChartService {
           }
         ]
       });
-      this.feedbackService.showFeedback(`${data.name} chart created successfully`, 'success');
+      this.feedbackService.showFeedback(`${data} chart created successfully`, 'success');
     } catch (error) {
       this.feedbackService.showFeedback(`Error: ${error}`, 'error');
     } finally {
@@ -98,7 +98,8 @@ export class ChartService {
     let response: boolean = false;
 
     try {
-      await updateDoc(doc(db, `clients/${clientId}/${tab}/${section}`), { sections: arrayRemove(subSection) });
+      await updateDoc(doc(db, `clients/${clientId}/${tab}/${section}`), { subSections: arrayRemove(subSection) });
+      console.log(documentId)
       await deleteDoc(doc(db, `clients/${clientId}/${tab}/${section}/${subSection}/${documentId}`));
       response = true;
       this.feedbackService.showFeedback('Chart deleted successfully', 'success');

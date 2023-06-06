@@ -11,6 +11,7 @@ import { DrawerContentModule } from '~/components/drawer-content/drawer-content.
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FooterModule } from '~/components/footer/footer.module';
 import { NavBarMainModule } from '~/components/navbars/navbar-main/navbar-main.module';
+import { TitleCaseExtendedPipe } from '~/pipes/titlecase-extended.pipe';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,7 @@ import { NavBarMainModule } from '~/components/navbars/navbar-main/navbar-main.m
     NavBarMainModule,
     NavBarSectionModule,
   ],
-  providers: [],
+  providers: [TitleCaseExtendedPipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -7,6 +7,8 @@ import { ClientService } from '~/services/client.service';
 import Client from '~/interfaces/Client.interface';
 import { ExportService } from '~/services/export.service';
 import { TitleCaseExtendedPipe } from '~/pipes/titlecase-extended.pipe';
+import { EnterpriseNode } from '~/interfaces/Enterprise.interface';
+import { DocumentReference } from 'firebase/firestore';
 
 @Component({
   selector: 'tab-chart-group',
@@ -33,9 +35,15 @@ export class TabChartGroupComponent implements OnInit, OnDestroy {
 
     const response = await this.dialogService.openDialogAdd({ title: 'Add a name to the chart', client: this.client, tab: this.tab, section: this.section });
     if (response) {
-      const createdChart = await this.chartService.getChart(this.client.id!, this.tab, this.section, response.name, response.docId);
-      this.chartGroups.push({ title: response.name, docId: response.docId, chartData: createdChart.data });
-      this.selectedIndex = this.chartGroups.length - 1;
+      response.name = response.name.replaceAll(' ', '-').toLocaleLowerCase();
+      const chartReference = await this.chartService.addChart(this.client, this.tab, this.section, response.name);
+      if (chartReference.id) {
+        const createdChart = await this.chartService.getChart(this.client.id!, this.tab, this.section, response.name, chartReference.id);
+        if (createdChart) {
+          this.chartGroups.push({ title: response.name, docId: response.docId, chartData: createdChart.data });
+          this.selectedIndex = this.chartGroups.length - 1;
+        }
+      }
     }
   }
 
@@ -49,9 +57,7 @@ export class TabChartGroupComponent implements OnInit, OnDestroy {
     const response = await this.dialogService.openDialogConfirm({ title: 'Confirm Deletion', message: 'Are you sure you wish to clear this chart?' });
 
     if (response) {
-      const currentOrgChart = this.orgCharts?.get(this.selectedIndex) as any;
-      currentOrgChart.nodes = [];
-      currentOrgChart.orgChart.load([]);
+      this.orgChart.orgChart.load(this.orgChart.nodes.filter((node: EnterpriseNode) => { return node.tags.includes('root') || node.tags.includes('subRoot') }));
     }
   }
 
@@ -60,7 +66,18 @@ export class TabChartGroupComponent implements OnInit, OnDestroy {
   }
 
   public async onRename() {
+    const response = await this.dialogService.openDialogAdd({ title: 'Rename Chart' });
 
+    if (response) {
+      const chartReference: DocumentReference = await this.chartService.addChart(this.client, this.tab, this.section, response.name);
+      const deletedChart = await this.chartService.deleteChart(this.client.id!, this.tab, this.section, this.orgChart.subSection, this.orgChart.documentId);
+      if (deletedChart) {
+        const createdChart = await this.chartService.getChart(this.client.id!, this.tab, this.section, response.name, chartReference.id);
+        if (createdChart) {
+          this.chartGroups.splice(this.selectedIndex, 1, { title: createdChart.name, docId: createdChart.docId, chartData: createdChart.data })
+        }
+      }
+    }
   }
 
   public async onExport() {
@@ -73,9 +90,7 @@ export class TabChartGroupComponent implements OnInit, OnDestroy {
 
     if (response) {
       const subSection = this.chartGroups[this.selectedIndex].title;
-      const docId = this.orgCharts?.get(this.selectedIndex)?.documentId!;
-
-      const response = await this.chartService.deleteChart(this.client.id!, this.tab, this.section, subSection, docId);
+      const response = await this.chartService.deleteChart(this.client.id!, this.tab, this.section, subSection, this.orgChart.documentId);
 
       if (response) {
         this.chartGroups.splice(this.selectedIndex, 1);

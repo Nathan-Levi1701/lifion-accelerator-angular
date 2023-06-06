@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { TitleCaseExtendedPipe } from '~/pipes/titlecase-extended.pipe';
 import { ChartService } from '~/services/chart.service';
 
 @Component({
@@ -11,7 +12,7 @@ import { ChartService } from '~/services/chart.service';
 export class DialogAddComponent implements OnInit {
   public formGroup: FormGroup = new FormGroup({});
 
-  constructor(public fb: FormBuilder, public dialogRef: MatDialogRef<DialogAddComponent>, @Inject(MAT_DIALOG_DATA) public data: any, public chartService: ChartService) {
+  constructor(public fb: FormBuilder, public dialogRef: MatDialogRef<DialogAddComponent>, @Inject(MAT_DIALOG_DATA) public data: any, public chartService: ChartService, public titlecaseExtended: TitleCaseExtendedPipe) {
     this.formGroup = this.fb.group({
       name: ['', [Validators.required]],
     })
@@ -24,8 +25,7 @@ export class DialogAddComponent implements OnInit {
 
   public async onSubmit(formGroup: FormGroup) {
     if (formGroup.valid) {
-      const response = await this.chartService.addChart(this.data.client, this.data.tab, this.data.section, this.formGroup.value);
-      this.dialogRef.close({ docId: response.id, name: (this.formGroup.get('name')?.value.replaceAll(' ', '-')).toLocaleLowerCase() });
+      this.dialogRef.close(this.formGroup.value);
     }
   }
 } 

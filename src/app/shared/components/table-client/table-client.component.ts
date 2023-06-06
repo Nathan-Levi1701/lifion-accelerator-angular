@@ -3,7 +3,6 @@ import { FormControl } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import Client from '~/interfaces/Client.interface';
-import { LayoutClientsComponent } from '~/layouts/layout-clients/layout-clients.component';
 import { ClientService } from '~/services/client.service';
 
 @Component({
@@ -18,7 +17,7 @@ export class TableClientComponent implements OnInit, OnDestroy {
   public dataSource: MatTableDataSource<Client> = new MatTableDataSource();
   public nameControl = new FormControl();
 
-  displayedColumns: string[] = ['id', 'name', 'createdAt', 'updatedAt', 'onboard', 'actions'];
+  displayedColumns: string[] = ['name', 'createdAt', 'updatedAt', 'onboard', 'actions'];
 
   async ngOnInit(): Promise<void> {
     this.dataSource.data = await this.clientService.getClients();

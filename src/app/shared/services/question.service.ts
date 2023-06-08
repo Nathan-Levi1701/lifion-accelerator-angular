@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { db } from '../../firebase/config';
 import { getDocs, collection, orderBy, query, QueryDocumentSnapshot, DocumentData, getDoc, doc } from 'firebase/firestore';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { LoaderService } from './loader.service';
 import { FeedbackService } from './feedback.service';
+import { db } from '../../../../environments';
 
 @Injectable({
   providedIn: 'root'

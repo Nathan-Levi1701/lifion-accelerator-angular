@@ -1,0 +1,26 @@
+<div class="header">
+    <img src="../../../../assets/logo-bg.png" alt="">
+    <h1 class="mat-h1">Lifion Accelerator</h1>
+</div>
+<div class="container">
+    <form [formGroup]="formGroup" (ngSubmit)="onSubmit(formGroup)">
+        <h3 class="mat-h1">Login</h3>
+        <mat-form-field appearance="fill">
+            <mat-label>Email Address</mat-label>
+            <input matInput formControlName="email" type="email">
+            <mat-error *ngIf="formGroup.get('email')?.hasError('required')">Email address is required</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Password</mat-label>
+            <input matInput formControlName="password" [type]="toggleVisibility ? 'password' : 'text'">
+            <button mat-icon-button matSuffix (click)="toggleVisibility = !toggleVisibility">
+                <mat-icon>{{toggleVisibility ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf="formGroup.get('password')?.hasError('required')">Password is required</mat-error>
+        </mat-form-field>
+        <div class="footer">
+            <button mat-button color="accent" type="reset">Reset</button>
+            <button mat-flat-button color="primary" type="submit">Login</button>
+        </div>
+    </form>
+</div>

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { db } from '../../firebase/config';
+import { db } from '../../../../environments';
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, updateDoc, limit, startAfter, orderBy, setDoc } from "firebase/firestore";
 import Client from '~/interfaces/Client.interface'
 import { Observable, BehaviorSubject } from 'rxjs';

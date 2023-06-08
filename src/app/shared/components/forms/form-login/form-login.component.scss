@@ -1,0 +1,39 @@
+:host {
+    display: block;
+    width: 425px;
+    align-self: center;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+
+    img {
+        height: 60px;
+        width: auto;
+        margin-bottom: 1rem;
+    }
+
+    .mat-h1 {
+        font-size: 32px;
+        font-weight: bold;
+    }
+}
+
+.container {
+    border: 1px solid #e6e6e4;
+    border-radius: 6px;
+    padding: 1rem;
+
+    form {
+        display: flex;
+        flex-direction: column;
+
+        .footer {
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+}

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { db } from '../../firebase/config';
+import { db } from '../../../../environments';
 import { setDoc, doc, addDoc, collection, DocumentData, QueryDocumentSnapshot, getDocs, query, updateDoc, getDoc } from 'firebase/firestore';
 import { FeedbackService } from './feedback.service';
 import { LoaderService } from './loader.service';

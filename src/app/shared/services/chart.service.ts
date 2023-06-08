@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { db } from '../../firebase/config';
+import { db } from '../../../../environments';
 import { addDoc, collection, doc, arrayUnion, arrayRemove, updateDoc, getDoc, deleteDoc } from 'firebase/firestore';
 import { FeedbackService } from './feedback.service';
 import { LoaderService } from './loader.service';

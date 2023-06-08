@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { FormService } from '~/services/form.service';
 
 @Component({
@@ -7,17 +8,22 @@ import { FormService } from '~/services/form.service';
   templateUrl: './header-section.component.html',
   styleUrls: ['./header-section.component.scss']
 })
-export class HeaderSectionComponent implements OnInit {
+export class HeaderSectionComponent implements OnInit, OnDestroy {
   public title: string = '';
   public documentId: string = '';
+  public activatedRouteSubscription!: Subscription;
 
   constructor(public activatedRoute: ActivatedRoute, public formService: FormService) {
-    this.activatedRoute.params.subscribe((params) => {
+
+  }
+
+  ngOnInit(): void {
+    this.activatedRouteSubscription = this.activatedRoute.params.subscribe((params) => {
       this.title = params['section'];
     })
   }
 
-  ngOnInit(): void {
-
+  ngOnDestroy(): void {
+    this.activatedRouteSubscription.unsubscribe();
   }
 }

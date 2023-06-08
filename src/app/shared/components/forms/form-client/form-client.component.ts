@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { ClientService } from '~/services/client.service';
 import { FormService } from '~/services/form.service';
 import { QuestionService } from '~/services/question.service';
@@ -13,6 +14,7 @@ import { QuestionService } from '~/services/question.service';
 
 export class FormClientComponent implements OnInit, OnDestroy {
   public formGroup: FormGroup = new FormGroup({});
+  public activatedRouteSubscription!: Subscription;
 
   constructor(public fb: FormBuilder, public clientService: ClientService, public formService: FormService, public questionService: QuestionService, public activatedRoute: ActivatedRoute, public router: Router) {
     this.formGroup = fb.group({
@@ -24,7 +26,7 @@ export class FormClientComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.activatedRoute.params.subscribe(async (params) => {
+    this.activatedRouteSubscription = this.activatedRoute.params.subscribe(async (params) => {
       if (params['id']) {
         const response = await this.clientService.get(params['id']);
         if (response) {
@@ -53,6 +55,6 @@ export class FormClientComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-
+    this.activatedRouteSubscription.unsubscribe();
   }
 }

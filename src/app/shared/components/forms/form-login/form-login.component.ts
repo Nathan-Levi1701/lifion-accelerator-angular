@@ -14,7 +14,7 @@ export class FormLoginComponent implements OnInit, OnDestroy {
 
   constructor(private fb: FormBuilder, public authService: AuthService) {
     this.formGroup = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.pattern(/^\w+[\w-\.]*\@\w+((-\w+)|(\w*))\.[a-z]{2,3}$/)]],
       password: ['', [Validators.required]]
     })
   }
@@ -24,7 +24,7 @@ export class FormLoginComponent implements OnInit, OnDestroy {
 
   async onSubmit(formGroup: FormGroup) {
     if (formGroup.valid) {
-      await this.authService.login(formGroup.value)
+      this.authService.login(formGroup.value)
     }
   }
 

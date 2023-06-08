@@ -1,6 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 import Client from '~/interfaces/Client.interface';
+import { AuthService } from '~/services/auth.service';
 import { ToolbarService } from '~/services/toolbar.service';
 
 @Component({
@@ -11,18 +13,19 @@ import { ToolbarService } from '~/services/toolbar.service';
 export class HeaderComponent implements OnInit, OnDestroy {
   public state: boolean = true;
   public client: Client = {} as any;
+  public toolbarSubscription!: Subscription;
 
-  constructor(public activatedRoute: ActivatedRoute, public toolbarService: ToolbarService) {
+  constructor(public activatedRoute: ActivatedRoute, public toolbarService: ToolbarService, public authService: AuthService) {
   }
 
   ngOnInit(): void {
-    this.toolbarService.toggleMenuObservable.subscribe((state: boolean) => {
+    this.toolbarSubscription = this.toolbarService.toggleMenuObservable.subscribe((state: boolean) => {
       this.state = state;
     });
   }
 
   ngOnDestroy(): void {
-    // this.toolbarService.tabsSubject.unsubscribe();
+    this.toolbarSubscription.unsubscribe();
   }
 
 }

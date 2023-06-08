@@ -1,14 +1,14 @@
-<div class="root">
+<div class="container">
     <app-header></app-header>
     <navbar-main></navbar-main>
     <navbar-section></navbar-section>
-    <div class="container">
+    <div class="content">
         <mat-sidenav-container>
             <mat-sidenav mode="side" [(opened)]="state">
                 <drawer-content></drawer-content>
             </mat-sidenav>
             <mat-sidenav-content>
-                <template-home></template-home>
+                <router-outlet></router-outlet>
             </mat-sidenav-content>
         </mat-sidenav-container>
     </div>

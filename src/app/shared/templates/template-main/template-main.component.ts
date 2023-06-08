@@ -19,6 +19,6 @@ export class TemplateMainComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.toolbarService.toggleMenuSubject.unsubscribe();
+
   }
 }

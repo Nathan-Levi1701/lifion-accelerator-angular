@@ -13,6 +13,7 @@ import { TitleCaseExtendedPipe } from '~/pipes/titlecase-extended.pipe';
 import { TemplateMainModule } from '~/templates/template-main/template-main.module';
 import { AngularFireModule } from '@angular/fire/compat';
 import { environment } from '../../environments';
+import { TemplateHomeModule } from '~/templates/template-home/template-home.module';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { environment } from '../../environments';
     BrowserAnimationsModule,
     NavBarMainModule,
     NavBarSectionModule,
+    TemplateHomeModule
   ],
   providers: [TitleCaseExtendedPipe],
   bootstrap: [AppComponent]

@@ -9,7 +9,6 @@ import { MaterialModule } from '../../../modules/material.module';
 import { DrawerContentModule } from '~/components/drawer-content/drawer-content.module';
 import { FooterModule } from '~/components/footer/footer.module';
 import { TemplateHomeModule } from '../template-home/template-home.module';
-
 @NgModule({
   declarations: [TemplateMainComponent],
   imports: [

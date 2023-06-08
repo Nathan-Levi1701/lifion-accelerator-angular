@@ -1,10 +1,7 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, QueryList, AfterViewInit, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { ClientService } from '~/services/client.service';
 import { FormService } from '~/services/form.service';
 import { FormInputComponent } from '../../forms/form-input/form-input.component';
-import { ToolbarService } from '~/services/toolbar.service';
 import { ExportService } from '~/services/export.service';
 import { TitleCaseExtendedPipe } from '~/pipes/titlecase-extended.pipe';
 @Component({
@@ -25,7 +22,7 @@ export class TabFormGroupComponent implements OnInit, OnDestroy {
   @ViewChildren(FormInputComponent) formInputs?: QueryList<FormInputComponent>;
   @ViewChild(FormInputComponent, { static: false }) formInput!: FormInputComponent;
 
-  constructor(public activatedRoute: ActivatedRoute, public toolbarService: ToolbarService, public formService: FormService, public fb: FormBuilder, public clientService: ClientService, public exportService: ExportService, public titlecaseExtended: TitleCaseExtendedPipe) {
+  constructor(public formService: FormService, public fb: FormBuilder, public exportService: ExportService, public titlecaseExtended: TitleCaseExtendedPipe) {
   }
 
   ngOnInit() {

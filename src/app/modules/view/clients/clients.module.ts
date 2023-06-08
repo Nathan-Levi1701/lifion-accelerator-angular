@@ -8,6 +8,7 @@ import { LayoutClientsModule } from '~/layouts/layout-clients/layout-clients.mod
 import { FormClientModule } from '~/components/forms/form-client/form-client.module';
 import { TableClientModule } from '~/components/table-client/table-client.module';
 import { TabFormGroupModule } from '~/components/tab-groups/tab-form-group/tab-form-group.module';
+import { TemplateMainModule } from '~/templates/template-main/template-main.module';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { TabFormGroupModule } from '~/components/tab-groups/tab-form-group/tab-f
     TabFormGroupModule,
     ClientsRoutingModule,
     FormClientModule,
-    TableClientModule
+    TableClientModule,
+    TemplateMainModule
   ]
 })
 

@@ -5,6 +5,7 @@ import { ClientRoutingModule } from './client-routing.module';
 import { NavBarSectionModule } from '~/components/navbars/navbar-section/navbar-section.module';
 import { HeaderSectionModule } from '~/components/header-section/header-section.module';
 import { ContentSectionModule } from '~/components/content-section/content-section.module';
+import { TemplateMainModule } from '~/templates/template-main/template-main.module';
 
 @NgModule({
   declarations: [],
@@ -15,6 +16,7 @@ import { ContentSectionModule } from '~/components/content-section/content-secti
     HeaderSectionModule,
     ContentSectionModule,
     ClientRoutingModule,
+    TemplateMainModule
   ]
 })
 

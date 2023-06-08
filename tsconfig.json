@@ -61,6 +61,9 @@
       "~/pipes/*": [
         "app/shared/pipes/*"
       ],
+      "~/auth/*": [
+        "app/shared/auth/*"
+      ],
       "~/assets/*": [
         "assets/*"
       ],

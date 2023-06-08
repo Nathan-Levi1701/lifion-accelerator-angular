@@ -20,6 +20,6 @@ export class AppComponent {
   }
 
   ngOnDestroy(): void {
-    this.toolbarService.toggleMenuSubject.unsubscribe();
+
   }
 }

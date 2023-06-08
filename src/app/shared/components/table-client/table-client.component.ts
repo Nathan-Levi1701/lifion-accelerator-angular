@@ -27,6 +27,11 @@ export class TableClientComponent implements OnInit, OnDestroy {
     })
   }
 
+  public onClientSelect(clientId: string) {
+    const client = this.dataSource.data.find((c) => { return c.id === clientId })!;
+    this.clientService.clientSubject.next(client);
+  }
+
   public async deleteClient(clientId: string) {
     const index = this.dataSource.data.findIndex((data) => { return data.id === clientId });
     if (index > -1) {

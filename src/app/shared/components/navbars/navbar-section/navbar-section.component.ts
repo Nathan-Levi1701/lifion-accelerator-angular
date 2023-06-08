@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { filter, map, mergeMap } from 'rxjs';
+import { Subscription, filter } from 'rxjs';
 import Client from '~/interfaces/Client.interface';
 import { ClientService } from '~/services/client.service';
 import { ToolbarService } from '~/services/toolbar.service';
@@ -15,70 +15,68 @@ export class NavBarSectionComponent implements OnInit, OnDestroy {
   public tabs: Array<any> = [];
   public client: Client = {} as any;
 
-  constructor(public activatedRoute: ActivatedRoute, public toolbarService: ToolbarService, public clientService: ClientService, public router: Router) {
-    toolbarService.tabsObservable.subscribe((tabs) => {
-      this.tabs = tabs;
-    });
+  public clientSubscription!: Subscription;
+  public toolbarSubscription!: Subscription;
+  public routerSubscription!: Subscription;
+  public activatedRouteSubscription!: Subscription;
 
-    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((e: any) => {
-      if (e.url === '/') {
-        this.title = ''
+  constructor(public activatedRoute: ActivatedRoute, public toolbarService: ToolbarService, public clientService: ClientService, public router: Router) {
+
+  }
+
+  ngOnInit(): void {
+    this.activatedRouteSubscription = this.activatedRoute.data.subscribe((data) => {
+      if (data['title']) {
+        this.title = data['title'];
+        this.toolbarService.tabsSubject.next([]);
       }
     })
 
-    this.clientService.clientObservable.subscribe((client: Client) => {
-      this.client = client
+    this.activatedRouteSubscription = this.activatedRoute.params.subscribe(async (params) => {
+      if (params['tab']) {
+        this.title = params['tab']
+      }
+
+      if (params['clientId'] && !this.client.id) {
+        const response = await this.clientService.get(params['clientId']);
+        this.clientService.clientSubject.next(response);
+        this.client = response;
+      }
     })
 
-    this.router.events.pipe(filter((event) => event instanceof NavigationEnd), map(() => this.activatedRoute), map((route) => {
-      while (route.firstChild) route = route.firstChild;
-      return route;
-    }),
-      mergeMap((route) => route.data)).subscribe(async (data) => {
-        if (data['title']) {
-          this.title = data['title'];
+    this.toolbarSubscription = this.toolbarService.tabsObservable.subscribe((tabs) => {
+      this.tabs = tabs;
+    });
+
+    this.routerSubscription = this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((e: any) => {
+      if (e.url === '/') {
+        this.title = ''
+        this.tabs = [];
+        this.toolbarService.tabsSubject.next([]);
+      }
+    });
+
+    this.clientSubscription = this.clientService.clientObservable.subscribe((client: Client) => {
+      this.client = client;
+
+      this.tabs.forEach((tab) => {
+        if (tab.url.includes('clientId')) {
+          tab.url = tab.url.replace('clientId', client.id)
+        } else {
+          const a = (tab.url as string).split('/');
+          a[2] = client.id!;
+          tab.url = a.join('/')
         }
       })
 
-    this.router.events.pipe(filter((event) => event instanceof NavigationEnd), map(() => this.activatedRoute), map((route) => {
-      while (route.firstChild) route = route.firstChild;
-      return route;
-    }),
-      mergeMap((route) => route.params)).subscribe(async (params) => {
-        if (params['tab']) {
-          this.title = params['tab'].replaceAll('-', ' ');
-        }
-
-        if (params['clientId']) {
-          const response = await this.clientService.get(params['clientId']);
-          this.clientService.clientSubject.next(response);
-          this.client = response;
-
-          this.tabs.forEach((tab) => {
-            if (tab.url.includes('clientId')) {
-              tab.url = tab.url.replace('clientId', params['clientId'])
-            } else {
-              const a = (tab.url as string).split('/');
-              a[2] = params['clientId'];
-              tab.url = a.join('/')
-            }
-          })
-
-          this.toolbarService.tabsSubject.next(this.tabs)
-        }
-
-        if (!params['clientId']) {
-          this.tabs = []
-        }
-      })
-  }
-
-
-  ngOnInit(): void {
-
+      this.toolbarService.tabsSubject.next(this.tabs)
+    });
   }
 
   ngOnDestroy(): void {
+    this.clientSubscription.unsubscribe();
+    this.toolbarSubscription.unsubscribe();
+    this.routerSubscription.unsubscribe();
+    this.activatedRouteSubscription.unsubscribe();
   }
-
 }

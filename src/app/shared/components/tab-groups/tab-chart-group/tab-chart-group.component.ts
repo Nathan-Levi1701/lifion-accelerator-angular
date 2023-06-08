@@ -9,6 +9,7 @@ import { ExportService } from '~/services/export.service';
 import { TitleCaseExtendedPipe } from '~/pipes/titlecase-extended.pipe';
 import { EnterpriseNode } from '~/interfaces/Enterprise.interface';
 import { DocumentReference } from 'firebase/firestore';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'tab-chart-group',
@@ -16,17 +17,17 @@ import { DocumentReference } from 'firebase/firestore';
   styleUrls: ['./tab-chart-group.component.scss']
 })
 
-
 export class TabChartGroupComponent implements OnInit, OnDestroy {
   @Input() chartGroups: Array<{ title: string, docId: string, chartData: Array<any> }> = [];
   @Input() tab: string = '';
   @Input() section: string = '';
   public selectedIndex: number = 0;
   public client: Client = {} as any;
+  public clientSubscription!: Subscription;
   @ViewChildren('orgCharts') orgCharts?: QueryList<OrganizationChartComponent>;
   @ViewChild(OrganizationChartComponent, { static: false }) orgChart!: OrganizationChartComponent;
 
-  constructor(public activatedRoute: ActivatedRoute, public chartService: ChartService, public dialogService: DialogService, public clientService: ClientService, public exportService: ExportService, public titlecaseExtended: TitleCaseExtendedPipe) {
+  constructor(public chartService: ChartService, public dialogService: DialogService, public clientService: ClientService, public exportService: ExportService, public titlecaseExtended: TitleCaseExtendedPipe) {
 
   }
 
@@ -48,7 +49,7 @@ export class TabChartGroupComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.clientService.clientObservable.subscribe((client: Client) => {
+    this.clientSubscription = this.clientService.clientObservable.subscribe((client: Client) => {
       this.client = client;
     })
   }
@@ -104,16 +105,12 @@ export class TabChartGroupComponent implements OnInit, OnDestroy {
     const docId = this.chartGroups[this.selectedIndex].docId;
     const nodes = this.chartGroups[this.selectedIndex].chartData;
 
-
-    console.log(subSection)
-    console.log(docId)
-
     await this.chartService.updateChart(this.client.id!, this.tab, this.section, subSection, docId, nodes);
   }
 
 
 
   ngOnDestroy(): void {
-
+    this.clientSubscription.unsubscribe();
   }
 }

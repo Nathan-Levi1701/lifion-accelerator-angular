@@ -31,6 +31,8 @@ export class AuthService {
     }).catch((error) => {
       this.authState = null;
       this.feedbackService.showFeedback(error.message, 'error');
+    }).finally(() => {
+      this.loaderService.close();
     })
   }
 

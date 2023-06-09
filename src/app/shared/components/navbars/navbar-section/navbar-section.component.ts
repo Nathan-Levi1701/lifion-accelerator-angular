@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { Subscription, filter } from 'rxjs';
 import Client from '~/interfaces/Client.interface';
 import { ClientService } from '~/services/client.service';
@@ -25,9 +25,15 @@ export class NavBarSectionComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.toolbarSubscription = this.toolbarService.tabsObservable.subscribe((tabs) => {
+      this.tabs = tabs;
+    });
+
+
     this.activatedRouteSubscription = this.activatedRoute.data.subscribe((data) => {
       if (data['title']) {
         this.title = data['title'];
+        this.tabs = [];
         this.toolbarService.tabsSubject.next([]);
       }
     })
@@ -44,11 +50,8 @@ export class NavBarSectionComponent implements OnInit, OnDestroy {
       }
     })
 
-    this.toolbarSubscription = this.toolbarService.tabsObservable.subscribe((tabs) => {
-      this.tabs = tabs;
-    });
 
-    this.routerSubscription = this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((e: any) => {
+    this.routerSubscription = this.router.events.pipe(filter((event) => event instanceof NavigationStart)).subscribe((e: any) => {
       if (e.url === '/') {
         this.title = ''
         this.tabs = [];

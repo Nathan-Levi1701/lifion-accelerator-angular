@@ -6,6 +6,7 @@ import { NavBarSectionModule } from '~/components/navbars/navbar-section/navbar-
 import { HeaderSectionModule } from '~/components/header-section/header-section.module';
 import { ContentSectionModule } from '~/components/content-section/content-section.module';
 import { TemplateMainModule } from '~/templates/template-main/template-main.module';
+import { AuthGuard } from '~/auth/auth.guard';
 
 @NgModule({
   declarations: [],
@@ -17,7 +18,8 @@ import { TemplateMainModule } from '~/templates/template-main/template-main.modu
     ContentSectionModule,
     ClientRoutingModule,
     TemplateMainModule
-  ]
+  ],
+  providers: [AuthGuard]
 })
 
 export class ClientModule { }

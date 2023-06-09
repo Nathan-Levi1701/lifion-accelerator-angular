@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from '~/auth/auth.guard';
 import { ContentSectionComponent } from '~/components/content-section/content-section.component';
 import { HeaderSectionComponent } from '~/components/header-section/header-section.component';
 import { NavBarSectionComponent } from '~/components/navbars/navbar-section/navbar-section.component';
@@ -8,7 +9,7 @@ import { TemplateMainComponent } from '~/templates/template-main/template-main.c
 
 const routes: Routes = [
     {
-        path: ':clientId/:tab/:section', title: 'Lifion Accelerator | Onboard', component: TemplateMainComponent, children: [
+        path: ':clientId/:tab/:section', title: 'Lifion Accelerator | Onboard', component: TemplateMainComponent, canActivate: [AuthGuard], children: [
             {
                 path: '', title: 'Lifion Accelerator | Onboard', component: LayoutOneComponent,
                 children: [

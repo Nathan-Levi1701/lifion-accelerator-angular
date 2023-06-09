@@ -10,7 +10,10 @@
             <span>Lifion Accelerator</span>
         </div>
         <div class="right">
-            <button mat-flat-button color="primary" (click)="authService.logout()">Logout</button>
+            <button mat-flat-button color="primary" *ngIf="!authService.isLoggedIn()"
+                [routerLink]="['login']">Login</button>
+            <button mat-flat-button color="primary" *ngIf="authService.isLoggedIn()"
+                (click)="authService.logout()">Logout</button>
             <!-- <button mat-icon-button>
                 <mat-icon>settings</mat-icon>
             </button>
